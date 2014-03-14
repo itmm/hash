@@ -16,9 +16,13 @@ static void _test_suite_run(unit_test *test) {
     test->passed = 0;
     if (suite) {
         for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
-            test_run(*cur);
-            test->failed += (*cur)->failed;
-            test->passed += (*cur)->passed;
+            if (*cur) {
+                test_run(*cur);
+                test->failed += (*cur)->failed;
+                test->passed += (*cur)->passed;
+            } else {
+                log_error_with_handler(log_default_handler, "test in suite is NULL");
+            }
         }
     }
 }
