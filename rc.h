@@ -14,8 +14,8 @@
     typedef void (dealloc_fn)(void *rc);
 
     void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc);
-    void rc_retain(void *rc);
-    void rc_release(void *rc);
+    void *rc_retain(void *rc);
+    void *rc_release(void *rc);
 
     rc_type rc_get_type(void *rc);
 

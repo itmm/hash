@@ -2,10 +2,11 @@
 #define rclist_h
 
     typedef struct {
-        void *head;
-        void *tail;
+        void *key;
+        void *value;
+        void *next;
     } rclist;
 
-    rclist *rclist_cons(void *head, void *tail);
+    rclist *rclist_cons(void *key, void *value, void *next);
 
 #endif

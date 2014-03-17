@@ -45,6 +45,16 @@ static void _retain_needs_double_release(unit_state *state) {
     assert_eq(state, 1, _dealloc_count);
 }
 
+static void _retain_NULL(unit_state *state) {
+    rc_retain(NULL);
+    assert_eq(state, 0, _dealloc_count);
+}
+
+static void _release_NULL(unit_state *state) {
+    rc_release(NULL);
+    assert_eq(state, 0, _dealloc_count);
+}
+
 #pragma mark - suite
 
 unit_test *create_rc_tests() {
@@ -52,6 +62,8 @@ unit_test *create_rc_tests() {
         test_full_alloc("simple", _init_counter, _simple, NULL),
         test_full_alloc("simple", _init_counter, _retain_avoids_dealloc, NULL),
         test_full_alloc("simple", _init_counter, _retain_needs_double_release, NULL),
+        test_full_alloc("retain NULL", _init_counter, _retain_NULL, NULL),
+        test_full_alloc("release NULL", _init_counter, _release_NULL, NULL),
         NULL
     );
 }

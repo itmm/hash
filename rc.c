@@ -40,8 +40,8 @@ void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc) {
 
 typedef void (wrapped_fn)(void *rc, struct rc *r);
 
-static inline void _assert(void *rc, wrapped_fn wrapped) {
-    return_unless(rc);
+static inline void *_assert(void *rc, wrapped_fn wrapped) {
+    if (!rc) { return NULL; }
     
     struct rc *r = rc - padded_rc_size();
     if (!r->count) {
@@ -53,14 +53,16 @@ static inline void _assert(void *rc, wrapped_fn wrapped) {
     else {
         wrapped(rc, r);
     }
+    
+    return rc;
 }
 
 static void _rc_retain(void *rc, struct rc *r) {
     ++r->count;
 }
 
-void rc_retain(void *rc) {
-    _assert(rc, _rc_retain);
+void *rc_retain(void *rc) {
+    return _assert(rc, _rc_retain);
 }
 
 static inline void _rc_release(void *rc, struct rc *r) {
@@ -70,8 +72,8 @@ static inline void _rc_release(void *rc, struct rc *r) {
     }
 }
 
-void rc_release(void *rc) {
-    _assert(rc, _rc_release);
+void *rc_release(void *rc) {
+    return _assert(rc, _rc_release);
 }
 
 rc_type rc_get_type(void *rc) {
