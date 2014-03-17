@@ -5,6 +5,7 @@
 #include "t_log.h"
 #include "t_rc.h"
 #include "t_rcstr.h"
+#include "t_unit.h"
 #include "unit.h"
 
 #pragma mark - suite
@@ -15,6 +16,7 @@ int main(int argc, const char * argv[])
         create_log_tests(),
         create_rc_tests(),
         create_rcstr_tests(),
+        create_unit_tests(),
         NULL
     );
     

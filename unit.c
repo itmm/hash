@@ -2,6 +2,7 @@
 
 #include "log.h"
 
+#include <setjmp.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -127,7 +128,9 @@ void test_run(unit_test *test, unit_state *state) {
     ++state->count;
     
     if (test->setup) test->setup(state);
-    if (test->run) test->run(state);
+    if (!setjmp(state->env)) {
+        if (test->run) test->run(state);
+    }
     if (test->teardown) test->teardown(state);
 }
 
@@ -153,8 +156,11 @@ void test_assert(unit_state *state, bool condition, const char *file, int line, 
         }
         va_list parameters;
         va_start(parameters, format);
-        log_message_with_handler_list(log_default_handler, file, line, function, "UNIT-TEST FAILED", format, parameters);
+        log_message_with_list(file, line, function, "UNIT-TEST FAILED", format, parameters);
         va_end(parameters);
+        if (state) {
+            longjmp(state->env, 1);
+        }
     }
 }
 

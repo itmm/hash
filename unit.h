@@ -1,6 +1,7 @@
 #ifndef unit_h
 #define unit_h
 
+#include <setjmp.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -10,6 +11,7 @@
         void *context;
         unsigned count;
         unsigned failed;
+        jmp_buf env;
     } unit_state;
 
     typedef void (executor)(unit_state *test);
@@ -37,7 +39,8 @@
 #pragma mark - assertions
 
     #define assert(state, cond, ...) test_assert(state, cond, __FILE__, __LINE__, __func__, __VA_ARGS__)
-    #define assert_eq(state, a, b) test_assert(state, a == b, __FILE__, __LINE__, __func__, #a " != " #b)
+    #define assert_eq(state, a, b) test_assert( \
+        state, a == b, __FILE__, __LINE__, __func__, #a " (%d) != " #b " (%d)", (int) a, (int) b)
     #define assert_eq_str(state, str1, str2) test_assert( \
         state, strcmp(str1, str2) == 0, __FILE__, __LINE__, __func__, #str1 " (\"%s\") != " #str2 " (\"%s\")", str1, str2)
     

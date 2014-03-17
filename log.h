@@ -21,6 +21,15 @@
         ...
     ) __attribute__((format(printf, 5, 6)));
 
+    void log_message_with_list(
+        const char *file,
+        int line,
+        const char *function,
+        const char *type,
+        const char *format,
+        va_list parameters
+    );
+
 #pragma mark - switch log handler
 
     typedef void (log_handler)(

@@ -46,6 +46,17 @@ void log_message_with_handler(
     va_end(parameters);
 }
 
+void log_message_with_list(
+    const char *file,
+    int line,
+    const char *function,
+    const char *type,
+    const char *format,
+    va_list parameters
+) {
+    log_message_with_handler_list(_current_handler, file, line, function, type, format, parameters);
+}
+
 void log_message(const char *file, int line, const char *function, const char *type, const char *format, ...) {
     va_list parameters;
     va_start(parameters, format);
