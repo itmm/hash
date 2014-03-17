@@ -13,7 +13,14 @@ static log_handler *_oldLogHandler;
 static char *_gotMessage;
 static const char *_gotType;
 
-static void _testing_log_handler(const char *file, int line, const char *type, const char *format, va_list parameters) {
+static void _testing_log_handler(
+    const char *file,
+    int line,
+    const char *function,
+    const char *type,
+    const char *format,
+    va_list parameters
+) {
     if (!_gotMessage) {
         va_list tmp;
         va_copy(tmp, parameters);

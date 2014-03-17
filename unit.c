@@ -144,7 +144,7 @@ void test_summary(unit_state *state) {
 }
 
 
-void test_assert(unit_state *state, bool condition, const char *file, int line, const char *format, ...) {
+void test_assert(unit_state *state, bool condition, const char *file, int line, const char *function, const char *format, ...) {
     if (!condition) {
         if (state) {
             ++state->failed;
@@ -153,7 +153,7 @@ void test_assert(unit_state *state, bool condition, const char *file, int line, 
         }
         va_list parameters;
         va_start(parameters, format);
-        log_message_with_handler_list(log_default_handler, file, line, "UNIT-TEST FAILED", format, parameters);
+        log_message_with_handler_list(log_default_handler, file, line, function, "UNIT-TEST FAILED", format, parameters);
         va_end(parameters);
     }
 }

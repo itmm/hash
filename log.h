@@ -5,18 +5,41 @@
 
 #pragma mark - logging
 
-    #define log_info(...) log_message(__FILE__, __LINE__, "info", __VA_ARGS__)
-    #define log_error(...) log_message(__FILE__, __LINE__, "ERROR", __VA_ARGS__)
-    #define log_info_with_handler(handler, ...) log_message_with_handler(handler, __FILE__, __LINE__, "info", __VA_ARGS__)
-    #define log_error_with_handler(handler, ...) log_message_with_handler(handler, __FILE__, __LINE__, "ERROR", __VA_ARGS__)
+    #define log_info(...) log_message(__FILE__, __LINE__, __func__, "info", __VA_ARGS__)
+    #define log_error(...) log_message(__FILE__, __LINE__, __func__, "ERROR", __VA_ARGS__)
+    #define log_info_with_handler(handler, ...) \
+        log_message_with_handler(handler, __FILE__, __LINE__, __func__, "info", __VA_ARGS__)
+    #define log_error_with_handler(handler, ...) \
+        log_message_with_handler(handler, __FILE__, __LINE__, __func__, "ERROR", __VA_ARGS__)
 
-    void log_message(const char *file, int line, const char *type, const char *format, ...) __attribute__((format(printf, 4, 5)));
+    void log_message(
+        const char *file,
+        int line,
+        const char *function,
+        const char *type,
+        const char *format,
+        ...
+    ) __attribute__((format(printf, 5, 6)));
 
 #pragma mark - switch log handler
 
-    typedef void (log_handler)(const char *file, int line, const char *type, const char *format, va_list parameters);
+    typedef void (log_handler)(
+        const char *file,
+        int line,
+        const char *function,
+        const char *type,
+        const char *format,
+        va_list parameters
+    );
 
-    void log_default_handler(const char *file, int line, const char *type, const char *format, va_list parameters);
+    void log_default_handler(
+        const char *file,
+        int line,
+        const char *function,
+        const char *type,
+        const char *format,
+        va_list parameters
+    );
 
     log_handler *log_set_handler(log_handler *handler);
 
@@ -24,14 +47,16 @@
         log_handler *handler,
         const char *file,
         int line,
+        const char *function,
         const char *type,
         const char *format, ...
-    ) __attribute__((format(printf, 5, 6)));
+    ) __attribute__((format(printf, 6, 7)));
 
     void log_message_with_handler_list(
         log_handler *handler,
         const char *file,
         int line,
+        const char *function,
         const char *type,
         const char *format,
         va_list parameters
