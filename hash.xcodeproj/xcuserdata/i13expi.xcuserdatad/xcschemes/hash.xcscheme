@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70E43C1618D09A5E00C4AF92"
                BuildableName = "libReferenceCounting.a"
-               BlueprintName = "ReferenceCounting"
-               ReferencedContainer = "container:ReferenceCounting.xcodeproj">
+               BlueprintName = "hash"
+               ReferencedContainer = "container:hash.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
