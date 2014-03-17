@@ -17,9 +17,11 @@
 
     typedef struct unit_test {
         const char *name;
+        void *context;
         executor *setup;
         executor *run;
         executor *teardown;
+        void (*dealloc)(void *context);
     } unit_test;
 
 
