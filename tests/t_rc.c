@@ -19,7 +19,7 @@ void _init_counter(unit_state *state) {
 
 static void *alloc_chunk() {
     void *result = rc_alloc(10, rc_type_unknown, _dealloc_counter);
-    return_null_value(result, NULL);
+    return_value_unless(result, NULL);
     return result;
 }
 

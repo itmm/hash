@@ -26,7 +26,7 @@ void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc) {
     if (size <= SIZE_MAX - data_size) {
         size += data_size;
         result = malloc(size);
-        return_null_value(result, NULL);
+        return_value_unless(result, NULL);
         struct rc *r = result;
         r->dealloc = dealloc;
         r->count = 1;
@@ -41,7 +41,7 @@ void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc) {
 typedef void (wrapped_fn)(void *rc, struct rc *r);
 
 static inline void _assert(void *rc, wrapped_fn wrapped) {
-    return_null(rc);
+    return_unless(rc);
     
     struct rc *r = rc - padded_rc_size();
     if (!r->count) {
@@ -75,7 +75,7 @@ void rc_release(void *rc) {
 }
 
 rc_type rc_get_type(void *rc) {
-    return_null_value(rc, rc_type_unknown);
+    return_value_unless(rc, rc_type_unknown);
     struct rc *r = rc - padded_rc_size();
     return r->type;
 }

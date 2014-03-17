@@ -12,12 +12,12 @@ typedef struct {
 } unit_suite_context;
 
 static void _test_suite_run(unit_state *state) {
-    return_null(state);
+    return_unless(state);
 
     --state->count; // suite is no test
     
     unit_suite_context *suite = state->context;
-    return_null(suite);
+    return_unless(suite);
     for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
         if (*cur) {
             test_run(*cur, state);
@@ -28,7 +28,7 @@ static void _test_suite_run(unit_state *state) {
 }
 
 static void _test_suite_dealloc(void *context) {
-    return_null(context);
+    return_unless(context);
     
     unit_suite_context *suite = context;
     if (suite->begin) {
@@ -49,7 +49,7 @@ unit_test *test_full_alloc(const char *name, executor setup, executor run, execu
     if (!run) log_info("test of unit_test is NULL");
     
     unit_test *result = malloc(sizeof(unit_test));
-    return_null_value(result, NULL);
+    return_value_unless(result, NULL);
 
     result->name = name;
     result->setup = setup;
@@ -110,7 +110,7 @@ unit_test *test_suite_alloc(const char *name, ...) {
 }
 
 void test_free(unit_test *test) {
-    return_null(test);
+    return_unless(test);
 
     if (test->dealloc) {
         test->dealloc(test->context);
@@ -119,8 +119,8 @@ void test_free(unit_test *test) {
 }
 
 void test_run(unit_test *test, unit_state *state) {
-    return_null(state);
-    return_null(test);
+    return_unless(state);
+    return_unless(test);
 
     state->context = test->context;
     ++state->count;
@@ -133,7 +133,7 @@ void test_run(unit_test *test, unit_state *state) {
 }
 
 void test_summary(unit_state *state) {
-    return_null(state);
+    return_unless(state);
     if (state->failed) {
         printf("%u UNIT-TESTS FAILED (from %u tests)\n", state->failed, state->count);
     } else {
@@ -144,7 +144,7 @@ void test_summary(unit_state *state) {
 
 void test_assert(unit_state *state, bool condition, const char *file, int line, const char *function, const char *format, ...) {
     if (!condition) {
-        return_null(state);
+        return_unless(state);
         ++state->failed;
         
         va_list parameters;

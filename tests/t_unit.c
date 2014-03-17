@@ -26,10 +26,10 @@ typedef struct {
 } runner_context;
 
 static void run_test(unit_state *state) {
-    return_null(state);
+    return_unless(state);
     
     runner_context *context = state->context;
-    return_null(context);
+    return_unless(context);
 
     unit_state wrapped_state = {0};
     disable_logging(&wrapped_state);
@@ -41,7 +41,7 @@ static void run_test(unit_state *state) {
 }
 
 static void dealloc_wrapper_context(void *context) {
-    return_null(context);
+    return_unless(context);
 
     test_free(((runner_context *) context)->test);
     free(context);
