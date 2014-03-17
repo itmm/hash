@@ -30,5 +30,6 @@ int main(int argc, const char * argv[])
     test_run(suite, &state);
     test_summary(&state);
     test_free(suite);
-    return 0;
+    
+    exit(state.failed ? EXIT_FAILURE : EXIT_SUCCESS);
 }
