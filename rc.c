@@ -10,12 +10,12 @@ struct rc {
     unsigned count;
 };
 
-inline size_t pad_to_pointer(size_t size) {
+static inline size_t pad_to_pointer(size_t size) {
     size_t pointer_size = sizeof(void *);
     return ((size + pointer_size - 1) / pointer_size) * pointer_size;
 }
 
-inline size_t padded_rc_size() {
+static inline size_t padded_rc_size() {
     return pad_to_pointer(sizeof(struct rc));
 }
 
@@ -58,7 +58,7 @@ static inline void _assert(void *rc, wrapped_fn wrapped) {
     }
 }
 
-static inline void _rc_retain(void *rc, struct rc *r) {
+static void _rc_retain(void *rc, struct rc *r) {
     ++r->count;
 }
 

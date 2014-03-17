@@ -1,8 +1,8 @@
-o   reference counting string
 o   reference counting list
 o   reference counting hash
 o   reference counting int
 
+x   reference counting string
 x   model suite using context
 x   add context to unit-test
 x   custom destructor for context
