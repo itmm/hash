@@ -26,32 +26,25 @@ typedef struct {
 } runner_context;
 
 static void run_test(unit_state *state) {
-    if (state) {
-        runner_context *context = state->context;
-        
-        if (context) {
-            unit_state wrapped_state = {0};
-            disable_logging(&wrapped_state);
-            test_run(context->test, &wrapped_state);
-            reset_logging(&wrapped_state);
-            
-            assert_eq(state, context->expected_failures, wrapped_state.failed);
-            assert_eq(state, context->expected_count, wrapped_state.count);
-        } else {
-            log_error("context not set");
-        }
-    } else {
-        log_error("state not set");
-    }
+    return_null(state);
+    
+    runner_context *context = state->context;
+    return_null(context);
+
+    unit_state wrapped_state = {0};
+    disable_logging(&wrapped_state);
+    test_run(context->test, &wrapped_state);
+    reset_logging(&wrapped_state);
+    
+    assert_eq(state, context->expected_failures, wrapped_state.failed);
+    assert_eq(state, context->expected_count, wrapped_state.count);
 }
 
 static void dealloc_wrapper_context(void *context) {
-    if (context) {
-        test_free(((runner_context *) context)->test);
-        free(context);
-    } else {
-        log_error("context is NULL");
-    }
+    return_null(context);
+
+    test_free(((runner_context *) context)->test);
+    free(context);
 }
 
 static unit_test *create_test_runner(unit_test *test, int expected_failures, int expected_count) { // consumes test
@@ -64,15 +57,15 @@ static unit_test *create_test_runner(unit_test *test, int expected_failures, int
             context->expected_count = expected_count;
             wrapper->context = context;
             wrapper->dealloc = dealloc_wrapper_context;
+            return wrapper;
         } else {
             log_error("can't allocate runner context");
-            test_free(test);
         }
     } else {
         log_error("can't allocate runner");
-        test_free(test);
     }
-    return wrapper;
+    test_free(test);
+    return NULL;
 }
 
 #pragma mark - tests

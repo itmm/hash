@@ -12,32 +12,32 @@ typedef struct {
 } unit_suite_context;
 
 static void _test_suite_run(unit_state *state) {
-    unit_suite_context *suite = state->context;
+    return_null(state);
+
     --state->count; // suite is no test
-    if (suite) {
-        for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
-            if (*cur) {
-                test_run(*cur, state);
-            } else {
-                log_error_with_handler(log_default_handler, "test in suite is NULL");
-            }
+    
+    unit_suite_context *suite = state->context;
+    return_null(suite);
+    for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
+        if (*cur) {
+            test_run(*cur, state);
+        } else {
+            log_error_with_handler(log_default_handler, "test in suite is NULL");
         }
     }
 }
 
 static void _test_suite_dealloc(void *context) {
+    return_null(context);
+    
     unit_suite_context *suite = context;
-    if (suite) {
-        if (suite->begin) {
-            for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
-                test_free(*cur);
-            }
-            free(suite->begin);
+    if (suite->begin) {
+        for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
+            test_free(*cur);
         }
-        free(context);
-    } else {
-        log_error("suite context is NULL");
+        free(suite->begin);
     }
+    free(context);
 }
 
 unit_test *test_alloc(const char *name, executor run) {
@@ -47,16 +47,16 @@ unit_test *test_alloc(const char *name, executor run) {
 unit_test *test_full_alloc(const char *name, executor setup, executor run, executor teardown) {
     if (!name) log_info("name of unit_test is NULL");
     if (!run) log_info("test of unit_test is NULL");
+    
     unit_test *result = malloc(sizeof(unit_test));
-    if (result) {
-        result->name = name;
-        result->setup = setup;
-        result->run = run;
-        result->teardown = teardown;
-        result->dealloc = NULL;
-    } else {
-        log_error("can't alloc unit_test %s", name);
-    }
+    return_null_value(result, NULL);
+
+    result->name = name;
+    result->setup = setup;
+    result->run = run;
+    result->teardown = teardown;
+    result->dealloc = NULL;
+
     return result;
 }
 
@@ -110,19 +110,17 @@ unit_test *test_suite_alloc(const char *name, ...) {
 }
 
 void test_free(unit_test *test) {
-    if (test) {
-        if (test->dealloc) {
-            test->dealloc(test->context);
-        }
-        free(test);
-    } else {
-        log_info("test_free is NULL");
+    return_null(test);
+
+    if (test->dealloc) {
+        test->dealloc(test->context);
     }
+    free(test);
 }
 
 void test_run(unit_test *test, unit_state *state) {
-    if (!state) { log_error("suite is NULL"); return; }
-    if (!test) { log_info("test is NULL"); return; }
+    return_null(state);
+    return_null(test);
 
     state->context = test->context;
     ++state->count;
@@ -135,32 +133,26 @@ void test_run(unit_test *test, unit_state *state) {
 }
 
 void test_summary(unit_state *state) {
-    if (state) {
-        if (state->failed) {
-            printf("%u UNIT-TESTS FAILED (from %u tests)\n", state->failed, state->count);
-        } else {
-            printf("all %u tests passed.\n", state->count);
-        }
+    return_null(state);
+    if (state->failed) {
+        printf("%u UNIT-TESTS FAILED (from %u tests)\n", state->failed, state->count);
     } else {
-        log_info("state is NULL");
+        printf("all %u tests passed.\n", state->count);
     }
 }
 
 
 void test_assert(unit_state *state, bool condition, const char *file, int line, const char *function, const char *format, ...) {
     if (!condition) {
-        if (state) {
-            ++state->failed;
-        } else {
-            log_error("test is NULL");
-        }
+        return_null(state);
+        ++state->failed;
+        
         va_list parameters;
         va_start(parameters, format);
         log_message_with_list(file, line, function, "UNIT-TEST FAILED", format, parameters);
         va_end(parameters);
-        if (state) {
-            longjmp(state->env, 1);
-        }
+        
+        longjmp(state->env, 1);
     }
 }
 

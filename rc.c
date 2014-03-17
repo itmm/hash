@@ -25,14 +25,11 @@ void *rc_alloc(size_t size, dealloc_fn *dealloc) {
     if (size <= SIZE_MAX - data_size) {
         size += data_size;
         result = malloc(size);
-        if (result) {
-            struct rc *r = result;
-            r->count = 1;
-            r->dealloc = dealloc;
-            result += data_size;
-        } else {
-            log_error("not enough memory to alloc %lu bytes", size);
-        }
+        return_null_value(result, NULL);
+        struct rc *r = result;
+        r->count = 1;
+        r->dealloc = dealloc;
+        result += data_size;
     } else {
         log_error("can't alloc %lu bytes (too big)", size);
     }
@@ -42,19 +39,17 @@ void *rc_alloc(size_t size, dealloc_fn *dealloc) {
 typedef void (wrapped_fn)(void *rc, struct rc *r);
 
 static inline void _assert(void *rc, wrapped_fn wrapped) {
-    if (rc) {
-        struct rc *r = rc - padded_rc_size();
-        if (!r->count) {
-            log_error("object %p processed after dealloc", rc);
-        }
-        else if (r->count >= UINT_MAX) {
-            log_error("object %p retained too many times (will leak)", rc);
-        }
-        else {
-            wrapped(rc, r);
-        }
-    } else {
-        log_info("called with NULL object");
+    return_null(rc);
+    
+    struct rc *r = rc - padded_rc_size();
+    if (!r->count) {
+        log_error("object %p processed after dealloc", rc);
+    }
+    else if (r->count >= UINT_MAX) {
+        log_error("object %p retained too many times (will leak)", rc);
+    }
+    else {
+        wrapped(rc, r);
     }
 }
 
