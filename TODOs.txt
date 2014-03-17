@@ -1,7 +1,7 @@
-o   reference counting list
 o   reference counting hash
 o   reference counting int
 
+x   reference counting list
 x   reference counting type
 x   no double asserts in unit-test
 x   reference counting string

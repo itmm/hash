@@ -4,6 +4,7 @@
 #include "log.h"
 #include "t_log.h"
 #include "t_rc.h"
+#include "t_rclist.h"
 #include "t_rcstr.h"
 #include "t_unit.h"
 #include "unit.h"
@@ -15,6 +16,7 @@ int main(int argc, const char * argv[])
     unit_test *suite = test_suite_alloc("all tests",
         create_log_tests(),
         create_rc_tests(),
+        create_rclist_tests(),
         create_rcstr_tests(),
         create_unit_tests(),
         NULL
