@@ -6,10 +6,8 @@
 
 #pragma mark - test management
 
-    struct unit_test;
-
     typedef struct {
-        struct unit_test *current_test;
+        void *context;
         unsigned count;
         unsigned failed;
     } unit_state;

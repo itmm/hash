@@ -11,7 +11,7 @@ typedef struct {
 } unit_suite_context;
 
 static void _test_suite_run(unit_state *state) {
-    unit_suite_context *suite = state->current_test->context;
+    unit_suite_context *suite = state->context;
     --state->count; // suite is no test
     if (suite) {
         for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
@@ -123,7 +123,7 @@ void test_run(unit_test *test, unit_state *state) {
     if (!state) { log_error("suite is NULL"); return; }
     if (!test) { log_info("test is NULL"); return; }
 
-    state->current_test = test;
+    state->context = test->context;
     ++state->count;
     
     if (test->setup) test->setup(state);
