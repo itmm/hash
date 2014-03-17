@@ -62,24 +62,24 @@ unit_test *test_suite_alloc(const char *name, ...) {
         size_t count = 0;
         va_list tests;
         va_start(tests, name);
+        va_list tmp;
+        va_copy(tmp, tests);
+        
         for (;;) {
-            unit_test *test = va_arg(tests, unit_test *);
+            unit_test *test = va_arg(tmp, unit_test *);
             if (!test) break;
             ++count;
         }
-        va_end(tests);
 
         if (count) {
             suite->begin = malloc(count * sizeof(unit_test *));
             if (suite->begin) {
                 suite->end = suite->begin;
-                va_start(tests, name);
                 for (;;) {
                     unit_test *test = va_arg(tests, unit_test *);
                     if (!test) break;
                     *suite->end++ = test;
                 }
-                va_end(tests);
             } else {
                 log_error("can't alloc tests for unit_suite %s", name);
                 suite->begin = suite->end = NULL;
@@ -87,6 +87,8 @@ unit_test *test_suite_alloc(const char *name, ...) {
         } else {
             suite->begin = suite->end = NULL;
         }
+        
+        va_end(tests);
     } else {
         log_error("can't alloc unit_suite %s", name);
     }
