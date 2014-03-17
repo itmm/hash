@@ -15,14 +15,14 @@ const size_t max_log_size = 1024;
 
 static void _testing_log_handler(const char *file, int line, const char *type, const char *format, va_list parameters) {
     if (!_gotMessage) {
-        _gotMessage = malloc(max_log_size);
+        va_list tmp;
+        va_copy(tmp, parameters);
+        size_t needed_size = vsnprintf(NULL, 0, format, tmp) + 1;
+        _gotMessage = malloc(needed_size);
         if (_gotMessage) {
-            int size = vsnprintf(_gotMessage, max_log_size, format, parameters);
-            if (size >= max_log_size) {
-                log_error_with_handler(log_default_handler, "log message too big %d >= %lu", size, max_log_size);
-            }
+            vsnprintf(_gotMessage, needed_size, format, parameters);
         } else {
-            log_error_with_handler(log_default_handler, "can't allocate log message");
+            log_error_with_handler(log_default_handler, "can't allocate log message (%lu bytes)", needed_size);
         }
     } else {
         log_error_with_handler(log_default_handler, "already logged message %s", _gotMessage);
@@ -87,7 +87,7 @@ int main(int argc, const char * argv[])
     
     if (!suite) {
         log_error("can't alloc suite");
-        exit(10);
+        exit(EXIT_FAILURE);
     }
     test_run(suite);
     test_summary(suite);

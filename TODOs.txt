@@ -1,0 +1,6 @@
+o   reference counting string
+o   reference counting list
+o   reference counting hash
+o   reference counting int
+
+x   dynamic sized log strings

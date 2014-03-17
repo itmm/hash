@@ -39,6 +39,7 @@
 		70E43C2E18D208AF00C4AF92 /* t_log */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = t_log; sourceTree = BUILT_PRODUCTS_DIR; };
 		70E43C3018D208AF00C4AF92 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		70E43C3218D208AF00C4AF92 /* t_log.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = t_log.1; sourceTree = "<group>"; };
+		70E43C3818D6DDFB00C4AF92 /* TODOs.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODOs.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +64,7 @@
 		70E43C0E18D09A5E00C4AF92 = {
 			isa = PBXGroup;
 			children = (
+				70E43C3818D6DDFB00C4AF92 /* TODOs.txt */,
 				70E43C2418D1B0B000C4AF92 /* unit.h */,
 				70E43C2518D1B0BB00C4AF92 /* unit.c */,
 				70E43C2118D0A86800C4AF92 /* log.h */,
@@ -205,7 +207,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -245,7 +247,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -320,6 +322,7 @@
 				70E43C3518D208AF00C4AF92 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
