@@ -11,15 +11,13 @@ typedef struct {
     unit_test **end;
 } unit_suite;
 
-static void _test_suite_run(unit_test *test) {
-    unit_suite *suite = (unit_suite *) test;
-    test->passed = 0;
+static void _test_suite_run(unit_state *state) {
+    unit_suite *suite = (unit_suite *) state->current_test;
+    --state->count; // suite is no test
     if (suite) {
         for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
             if (*cur) {
-                test_run(*cur);
-                test->failed += (*cur)->failed;
-                test->passed += (*cur)->passed;
+                test_run(*cur, state);
             } else {
                 log_error_with_handler(log_default_handler, "test in suite is NULL");
             }
@@ -50,6 +48,15 @@ unit_test *test_full_alloc(const char *name, executor setup, executor run, execu
     return result;
 }
 
+size_t number_of_tests(va_list tests) {
+    va_list tmp;
+    va_copy(tmp, tests);
+        
+    size_t count = 0;
+    for (; va_arg(tmp, unit_test *); ++count) {}
+    return count;
+}
+
 unit_test *test_suite_alloc(const char *name, ...) {
     if (!name) log_info("name of unit_test is NULL");
     unit_suite *suite = malloc(sizeof(unit_suite));
@@ -59,17 +66,9 @@ unit_test *test_suite_alloc(const char *name, ...) {
         suite->wrapper.run = _test_suite_run;
         suite->wrapper.teardown = NULL;
         
-        size_t count = 0;
         va_list tests;
         va_start(tests, name);
-        va_list tmp;
-        va_copy(tmp, tests);
-        
-        for (;;) {
-            unit_test *test = va_arg(tmp, unit_test *);
-            if (!test) break;
-            ++count;
-        }
+        size_t count = number_of_tests(tests);
 
         if (count) {
             suite->begin = malloc(count * sizeof(unit_test *));
@@ -110,36 +109,35 @@ void test_free(unit_test *test) {
     }
 }
 
-void test_run(unit_test *test) {
-    if (test) {
-        test->failed = 0;
-        test->passed = 1;
-        if (test->setup) test->setup(test);
-        if (test->run) test->run(test);
-        if (test->teardown) test->teardown(test);
-    }
+void test_run(unit_test *test, unit_state *state) {
+    if (!state) { log_error("suite is NULL"); return; }
+    if (!test) { log_info("test is NULL"); return; }
+
+    state->current_test = test;
+    ++state->count;
+    
+    if (test->setup) test->setup(state);
+    if (test->run) test->run(state);
+    if (test->teardown) test->teardown(state);
 }
 
-void test_summary(unit_test *test) {
-    if (test) {
-        if (test->failed) {
-            printf("%u UNIT-TESTS FAILED (%u tests passed)\n", test->failed, test->passed);
+void test_summary(unit_state *state) {
+    if (state) {
+        if (state->failed) {
+            printf("%u UNIT-TESTS FAILED (from %u tests)\n", state->failed, state->count);
         } else {
-            printf("all %u tests passed.\n", test->passed);
+            printf("all %u tests passed.\n", state->count);
         }
     } else {
-        log_info("test is NULL");
+        log_info("state is NULL");
     }
 }
 
 
-void test_assert(unit_test *test, bool condition, const char *file, int line, const char *format, ...) {
+void test_assert(unit_state *state, bool condition, const char *file, int line, const char *format, ...) {
     if (!condition) {
-        if (test) {
-            ++test->failed;
-            if (test->passed) {
-                --test->passed;
-            }
+        if (state) {
+            ++state->failed;
         } else {
             log_error("test is NULL");
         }

@@ -35,13 +35,13 @@ static void _testing_log_handler(const char *file, int line, const char *type, c
     }
 }
 
-static void _setup_single_logger(unit_test *test) {
+static void _setup_single_logger(unit_state *state) {
     _oldLogHandler = log_set_handler(_testing_log_handler);
     _gotMessage = NULL;
     _gotType = NULL;
 }
 
-static void _teardown_single_logger(unit_test *test) {
+static void _teardown_single_logger(unit_state *state) {
     log_set_handler(_oldLogHandler);
     if (_gotMessage) {
         free(_gotMessage);
@@ -52,24 +52,24 @@ static void _teardown_single_logger(unit_test *test) {
 
 #pragma mark - tests
 
-static void _log_empty_message(unit_test *test) {
+static void _log_empty_message(unit_state *state) {
     log_info("");
-    assert_eq_str(test, "", _gotMessage);
+    assert_eq_str(state, "", _gotMessage);
 }
 
-static void _log_formatted_message(unit_test *test) {
+static void _log_formatted_message(unit_state *state) {
     log_error("n: %d, s: %s", 3, "abc");
-    assert_eq_str(test, "n: 3, s: abc", _gotMessage);
+    assert_eq_str(state, "n: 3, s: abc", _gotMessage);
 }
 
-static void _log_info_message(unit_test *test) {
+static void _log_info_message(unit_state *state) {
     log_info("");
-    assert_eq_str(test, "info", _gotType);
+    assert_eq_str(state, "info", _gotType);
 }
 
-static void _log_error_message(unit_test *test) {
+static void _log_error_message(unit_state *state) {
     log_error("");
-    assert_eq_str(test, "ERROR", _gotType);
+    assert_eq_str(state, "ERROR", _gotType);
 }
 
 
@@ -89,8 +89,9 @@ int main(int argc, const char * argv[])
         log_error("can't alloc suite");
         exit(EXIT_FAILURE);
     }
-    test_run(suite);
-    test_summary(suite);
+    unit_state state = {0};
+    test_run(suite, &state);
+    test_summary(&state);
     test_free(suite);
     return 0;
 }
