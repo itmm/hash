@@ -1,8 +1,9 @@
 o   reference counting list
 o   reference counting hash
 o   reference counting int
-o   no double asserts in unit-test
 
+x   reference counting type
+x   no double asserts in unit-test
 x   reference counting string
 x   model suite using context
 x   add context to unit-test

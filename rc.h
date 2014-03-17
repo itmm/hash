@@ -3,10 +3,20 @@
 
     #include <stdlib.h>
 
+    typedef enum {
+        rc_type_unknown,
+        rc_type_string,
+        rc_type_list,
+        rc_type_hash,
+        rc_type_int
+    } rc_type;
+
     typedef void (dealloc_fn)(void *rc);
 
-    void *rc_alloc(size_t size, dealloc_fn *dealloc);
+    void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc);
     void rc_retain(void *rc);
     void rc_release(void *rc);
+
+    rc_type rc_get_type(void *rc);
 
 #endif

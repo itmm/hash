@@ -8,6 +8,7 @@
 struct rc {
     dealloc_fn *dealloc;
     unsigned count;
+    rc_type type;
 };
 
 static inline size_t pad_to_pointer(size_t size) {
@@ -19,7 +20,7 @@ static inline size_t padded_rc_size() {
     return pad_to_pointer(sizeof(struct rc));
 }
 
-void *rc_alloc(size_t size, dealloc_fn *dealloc) {
+void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc) {
     const size_t data_size = padded_rc_size();
     void *result = NULL;
     if (size <= SIZE_MAX - data_size) {
@@ -27,8 +28,9 @@ void *rc_alloc(size_t size, dealloc_fn *dealloc) {
         result = malloc(size);
         return_null_value(result, NULL);
         struct rc *r = result;
-        r->count = 1;
         r->dealloc = dealloc;
+        r->count = 1;
+        r->type = type;
         result += data_size;
     } else {
         log_error("can't alloc %lu bytes (too big)", size);
@@ -70,4 +72,10 @@ static inline void _rc_release(void *rc, struct rc *r) {
 
 void rc_release(void *rc) {
     _assert(rc, _rc_release);
+}
+
+rc_type rc_get_type(void *rc) {
+    return_null_value(rc, rc_type_unknown);
+    struct rc *r = rc - padded_rc_size();
+    return r->type;
 }

@@ -1,5 +1,6 @@
 #include "t_rc.h"
 
+#include "log.h"
 #include "rc.h"
 
 #pragma mark - track deallocs
@@ -16,14 +17,20 @@ void _init_counter(unit_state *state) {
 
 #pragma mark - tests
 
+static void *alloc_chunk() {
+    void *result = rc_alloc(10, rc_type_unknown, _dealloc_counter);
+    return_null_value(result, NULL);
+    return result;
+}
+
 static void _simple(unit_state *state) {
-    void *a = rc_alloc(10, _dealloc_counter);
+    void *a = alloc_chunk();
     rc_release(a);
     assert_eq(state, 1, _dealloc_count);
 }
 
 static void _retain_avoids_dealloc(unit_state *state) {
-    void *a = rc_alloc(10, _dealloc_counter);
+    void *a = alloc_chunk();
     rc_retain(a);
     rc_release(a);
     assert_eq(state, 0, _dealloc_count);
@@ -31,7 +38,7 @@ static void _retain_avoids_dealloc(unit_state *state) {
 }
 
 static void _retain_needs_double_release(unit_state *state) {
-    void *a = rc_alloc(10, _dealloc_counter);
+    void *a = alloc_chunk();
     rc_retain(a);
     rc_release(a);
     rc_release(a);
