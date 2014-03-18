@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "70E43C1618D09A5E00C4AF92"
-               BuildableName = "libReferenceCounting.a"
+               BuildableName = "libhash.a"
                BlueprintName = "hash"
                ReferencedContainer = "container:hash.xcodeproj">
             </BuildableReference>

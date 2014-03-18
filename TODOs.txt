@@ -1,6 +1,10 @@
 o   reference counting hash
 o   reference counting int
+o   string representation of int
+o   string representation of hash
+o   strings escapen
 
+x   string representation of list
 x   reference counting list
 x   reference counting type
 x   no double asserts in unit-test
