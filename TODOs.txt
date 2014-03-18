@@ -4,8 +4,8 @@ o   string representation of int
 o   string representation of hash
 o   loops in lists erkennen
 o   loops in hashes erkennen
-o   mismatching quotes in string escapen
 
+x   mismatching quotes in string escapen
 x   backslash in string escapen
 x   strings escapen, wenn whitespace
 x   strings escapen, wenn quotes

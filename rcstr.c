@@ -34,6 +34,32 @@ rcstr rcstr_dups(size_t count, const char *srcs[count]) {
     return result;
 }
 
+bool has_matching_closing_quote(const char *cur, const char *end) {
+    int balance = 0;
+    for (; cur != end; ++cur) {
+        switch (*cur) {
+            case '[': ++balance; break;
+            case ']':
+                if (balance) { --balance; }
+                else { return true; }
+        }
+    }
+    return false;
+}
+
+bool has_matching_opening_quote(const char *cur, const char *prebegin) {
+    int balance = 0;
+    for (; cur != prebegin; --cur) {
+        switch (*cur) {
+            case ']': ++balance; break;
+            case '[':
+                if (balance) { --balance; }
+                else { return true; }
+        }
+    }
+    return false;
+}
+
 rcstr rcstr2str(rcstr str) {
     if (!str) { return rcstr_dup(""); }
     
@@ -52,8 +78,22 @@ rcstr rcstr2str(rcstr str) {
         else switch (ch) {
             case '(':
             case ')':
+                needs_escape = true;
+                break;
             case '[':
+                if (has_matching_closing_quote(cur + 1, end)) {
+                    needs_escape = true;
+                } else {
+                    escape_char = true;
+                }
+                break;
             case ']':
+                if (has_matching_opening_quote(cur - 1, (const char *) str - 1)) {
+                    needs_escape = true;
+                } else {
+                    escape_char = true;
+                }
+                break;
             case ':':
                 needs_escape = true;
                 break;
@@ -63,7 +103,7 @@ rcstr rcstr2str(rcstr str) {
                 break;
         }
         
-        if (out && out_end - out < 3) {
+        if (out && out_end - out < 3) {  // backslash + char + 0
             size_t used = out - out_begin;
             size_t needed = used * 2;
             out_begin = realloc(out_begin, needed);
@@ -75,7 +115,7 @@ rcstr rcstr2str(rcstr str) {
             needs_escape = true;
             if (!out) {
                 size_t used = cur - (const char *) str;
-                size_t needed = used + 10; // min 3: backslash + char + 0
+                size_t needed = used + 10;
                 out_begin = malloc(needed);
                 return_value_unless(out_begin, NULL);
                 out_end = out_begin + needed;
