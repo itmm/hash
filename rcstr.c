@@ -1,5 +1,6 @@
 #include "rcstr.h"
 
+#include <stdbool.h>
 #include <string.h>
 
 #include "log.h"
@@ -35,8 +36,69 @@ rcstr rcstr_dups(size_t count, const char *srcs[count]) {
 
 rcstr rcstr2str(rcstr str) {
     if (!str) { return rcstr_dup(""); }
-    if (strchr(str, ':')) { return rcstr_dups(3, (const char *[]) { "[", str, "]" } ); }
-    return rc_retain(str);
+    
+    const char *cur = str;
+    const char *end = cur + strlen(str);
+    
+    char *out_begin = NULL;
+    char *out = NULL;
+    char *out_end = NULL;
+    
+    bool needs_escape = false;
+    for (; cur != end; ++cur) {
+        bool escape_char = false;
+        char ch = *cur;
+        if (ch <= ' ') { needs_escape = true; }
+        else switch (ch) {
+            case '(':
+            case ')':
+            case '[':
+            case ']':
+            case ':':
+                needs_escape = true;
+                break;
+            case '\\':
+                escape_char = true;
+            default:
+                break;
+        }
+        
+        if (out && out_end - out < 3) {
+            size_t used = out - out_begin;
+            size_t needed = used * 2;
+            out_begin = realloc(out_begin, needed);
+            return_value_unless(out_begin, NULL);
+            out = out_begin + used;
+            out_end = out_begin + needed;
+        }
+        if (escape_char) {
+            needs_escape = true;
+            if (!out) {
+                size_t used = cur - (const char *) str;
+                size_t needed = used + 10; // min 3: backslash + char + 0
+                out_begin = malloc(needed);
+                return_value_unless(out_begin, NULL);
+                out_end = out_begin + needed;
+                memcpy(out_begin, str, used);
+                out = out_begin + used;
+            }
+            *out++ = '\\';
+        }
+        if (out) { *out++ = ch; };
+    }
+    
+    rcstr result;
+    if (out) {
+        *out = 0;
+        result = rcstr_dups(3, (const char *[]) { "[", out_begin, "]" });
+        free(out_begin);
+    } else if (needs_escape) {
+        result = rcstr_dups(3, (const char *[]) { "[", str, "]" } );
+    } else {
+        result = rc_retain(str);
+    }
+    return_value_unless(result, NULL);
+    return result;
 }
 
 rcstr rc2str(void *rc) {
