@@ -80,15 +80,28 @@ static void _double_list_string(unit_state *state) {
     rc_release(s);
 }
 
+static void _colon_key(unit_state *state) {
+    rcstr key = rcstr_dup(":[");
+    rcstr value = rcstr_dup("value");
+    rclist *lst = rclist_cons(key, value, NULL);
+    rc_release(key);
+    rc_release(value);
+    rcstr s = rclist2str(lst);
+    rc_release(lst);
+    assert_eq_str(state, "[:\\[]:value", s);
+    rc_release(s);
+}
+
 #pragma mark - suite
 
 unit_test *create_rclist_tests() {
-    return test_suite_alloc(6, (unit_test *[]) {
+    return test_suite_alloc(7, (unit_test *[]) {
         test_alloc(_empty_list),
         test_alloc(_empty_list_string),
         test_alloc(_simple_list),
         test_alloc(_simple_list_string),
         test_alloc(_strange_list_string),
-        test_alloc(_double_list_string)
+        test_alloc(_double_list_string),
+        test_alloc(_colon_key)
     });
 }
