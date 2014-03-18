@@ -13,14 +13,13 @@
 
 int main(int argc, const char * argv[])
 {
-    unit_test *suite = test_suite_alloc("all tests",
+    unit_test *suite = test_suite_alloc(5, (unit_test *[]) {
         create_log_tests(),
         create_rc_tests(),
         create_rclist_tests(),
         create_rcstr_tests(),
         create_unit_tests(),
-        NULL
-    );
+    });
     
     if (!suite) {
         log_error("can't alloc suite");

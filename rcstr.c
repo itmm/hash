@@ -1,6 +1,5 @@
 #include "rcstr.h"
 
-#include <stdarg.h>
 #include <string.h>
 
 #include "log.h"
@@ -8,42 +7,29 @@
 #include "rclist.h"
 
 rcstr rcstr_dup(const char *src) {
-    return_value_unless(src, NULL);
-    
-    size_t count = strlen(src) + 1;
-    void *result = rc_alloc(count, rc_type_string, NULL);
-    return_value_unless(result, NULL);
-    
-    memcpy(result, src, count);
-    
-    return result;
+    return rcstr_dups(1, (const char *[]) { src });
 }
 
-rcstr rcstr_dups(const char *first, ...) {
-    size_t count = strlen(first) + 1;
-    va_list strs;
-    va_start(strs, first);
-    va_list tmp;
-    va_copy(tmp, strs);
-    for (const char *cur; (cur = va_arg(tmp, const char *));) {
-        count += strlen(cur);
+rcstr rcstr_dups(size_t count, const char *srcs[count]) {
+    size_t length = 1;
+    const char **begin = srcs;
+    const char **end = begin + count;
+    for (const char **cur = begin; cur != end; ++cur) {
+        if (*cur) { length += strlen(*cur); }
     }
-    va_end(tmp);
 
-    void *result = rc_alloc(count, rc_type_string, NULL);
+    void *result = rc_alloc(length, rc_type_string, NULL);
     return_value_unless(result, NULL);
 
-    size_t len = strlen(first);
-    memcpy(result, first, len);
-    char *dest = result + len;
-    for (const char *cur; (cur = va_arg(strs, const char *));) {
-        len = strlen(cur);
-        memcpy(dest, cur, len);
-        dest += len;
+    char *dest = result;
+    for (const char **cur = begin; cur != end; ++cur) {
+        if (*cur) {
+            size_t len = strlen(*cur);
+            memcpy(dest, *cur, len);
+            dest += len;
+        }
     }
     *dest = 0;
-    va_end(strs);
-    
     return result;
 }
 

@@ -58,12 +58,11 @@ static void _release_NULL(unit_state *state) {
 #pragma mark - suite
 
 unit_test *create_rc_tests() {
-    return test_suite_alloc("rcstr tests",
-        test_full_alloc("simple", _init_counter, _simple, NULL),
-        test_full_alloc("simple", _init_counter, _retain_avoids_dealloc, NULL),
-        test_full_alloc("simple", _init_counter, _retain_needs_double_release, NULL),
-        test_full_alloc("retain NULL", _init_counter, _retain_NULL, NULL),
-        test_full_alloc("release NULL", _init_counter, _release_NULL, NULL),
-        NULL
-    );
+    return test_suite_alloc(5, (unit_test *[]) {
+         test_full_alloc(_init_counter, _simple, NULL),
+        test_full_alloc(_init_counter, _retain_avoids_dealloc, NULL),
+        test_full_alloc(_init_counter, _retain_needs_double_release, NULL),
+        test_full_alloc(_init_counter, _retain_NULL, NULL),
+        test_full_alloc(_init_counter, _release_NULL, NULL)
+    });
 }

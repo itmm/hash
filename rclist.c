@@ -37,22 +37,22 @@ rcstr rclist2str(rclist *lst) {
     rcstr next = rc2str(lst->next);
     
     if (key && lst->key && (rc_get_type(lst->key) == rc_type_list  || rc_get_type(lst->key) == rc_type_hash)) {
-        rcstr new_key = rcstr_dups("(", key, ")", NULL);
+        rcstr new_key = rcstr_dups(3, (const char *[]) { "(", key, ")" });
         rc_release((void *) key);
         key = new_key;
     }
     if (value && lst->value && (rc_get_type(lst->value) == rc_type_list  || rc_get_type(lst->value) == rc_type_hash)) {
-        rcstr new_value = rcstr_dups("(", value, ")", NULL);
+        rcstr new_value = rcstr_dups(3, (const char *[]) { "(", value, ")" });
         rc_release((void *) value);
         value = new_value;
     }
     if (next && lst->next) {
         if (rc_get_type(lst->next) == rc_type_list) {
-            rcstr new_next = rcstr_dups(" ", next, NULL);
+            rcstr new_next = rcstr_dups(2, (const char *[]) { " ", next });
             rc_release((void *) next);
             next = new_next;
         } else {
-            rcstr new_next = rcstr_dups(" . ", next, NULL);
+            rcstr new_next = rcstr_dups(2, (const char *[]) { " . ", next });
             rc_release((void *) next);
             next = new_next;
         }
@@ -66,7 +66,7 @@ rcstr rclist2str(rclist *lst) {
         return NULL;
     }
     
-    rcstr result = rcstr_dups(key, ":", value, next, NULL);
+    rcstr result = rcstr_dups(4, (const char *[]) { key, ":", value, next });
     rc_release((void *) key);
     rc_release((void *) value);
     rc_release((void *) next);

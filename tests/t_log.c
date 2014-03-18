@@ -83,11 +83,10 @@ static void _log_error_message(unit_state *state) {
 #pragma mark - suite
 
 unit_test *create_log_tests() {
-    return test_suite_alloc("log tests",
-        test_full_alloc("log empty message", _setup_single_logger, _log_empty_message, _teardown_single_logger),
-        test_full_alloc("log formatted message", _setup_single_logger, _log_formatted_message, _teardown_single_logger),
-        test_full_alloc("log info message", _setup_single_logger, _log_info_message, _teardown_single_logger),
-        test_full_alloc("log error message", _setup_single_logger, _log_error_message, _teardown_single_logger),
-        NULL
-    );
+    return test_suite_alloc(4, (unit_test *[]) {
+        test_full_alloc(_setup_single_logger, _log_empty_message, _teardown_single_logger),
+        test_full_alloc(_setup_single_logger, _log_formatted_message, _teardown_single_logger),
+        test_full_alloc(_setup_single_logger, _log_info_message, _teardown_single_logger),
+        test_full_alloc(_setup_single_logger, _log_error_message, _teardown_single_logger)
+    });
 }

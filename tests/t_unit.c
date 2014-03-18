@@ -48,7 +48,7 @@ static void dealloc_wrapper_context(void *context) {
 }
 
 static unit_test *create_test_runner(unit_test *test, int expected_failures, int expected_count) { // consumes test
-    unit_test *wrapper = test_alloc(test->name, run_test);
+    unit_test *wrapper = test_alloc(run_test);
     if (wrapper) {
         runner_context *context = malloc(sizeof(runner_context));
         if (context) {
@@ -78,8 +78,7 @@ static void _double_assert(unit_state *state) {
 #pragma mark - suite
 
 unit_test *create_unit_tests() {
-    return test_suite_alloc("unit tests",
-        create_test_runner(test_alloc("double assert", _double_assert), 1, 1),
-        NULL
-    );
+    return test_suite_alloc(1, (unit_test *[]) {
+        create_test_runner(test_alloc(_double_assert), 1, 1)
+    });
 }

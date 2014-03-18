@@ -40,18 +40,16 @@ static void _test_suite_dealloc(void *context) {
     free(context);
 }
 
-unit_test *test_alloc(const char *name, executor run) {
-    return test_full_alloc(name, NULL, run, NULL);
+unit_test *test_alloc(executor run) {
+    return test_full_alloc(NULL, run, NULL);
 }
 
-unit_test *test_full_alloc(const char *name, executor setup, executor run, executor teardown) {
-    if (!name) log_info("name of unit_test is NULL");
+unit_test *test_full_alloc(executor setup, executor run, executor teardown) {
     if (!run) log_info("test of unit_test is NULL");
     
     unit_test *result = malloc(sizeof(unit_test));
     return_value_unless(result, NULL);
 
-    result->name = name;
     result->setup = setup;
     result->run = run;
     result->teardown = teardown;
@@ -69,29 +67,23 @@ size_t number_of_tests(va_list tests) {
     return count;
 }
 
-unit_test *test_suite_alloc(const char *name, ...) {
-    if (!name) log_info("name of unit_test is NULL");
-    unit_test *test = test_full_alloc(name, NULL, _test_suite_run, NULL);
-    if (!test) { log_error("can't alloc suite test"); return NULL; }
+unit_test *test_suite_alloc(size_t count, unit_test *tests[count]) {
+    unit_test *test = test_full_alloc(NULL, _test_suite_run, NULL);
+    return_value_unless(test, NULL);
+
     unit_suite_context *suite = malloc(sizeof(unit_suite_context));
     if (suite) {
-        va_list tests;
-        va_start(tests, name);
-        size_t count = number_of_tests(tests);
-
         test->context = suite;
         test->dealloc = _test_suite_dealloc;
+
         if (count) {
-            suite->begin = malloc(count * sizeof(unit_test *));
+            size_t size = count * sizeof(unit_test *);
+            suite->begin = malloc(size);
             if (suite->begin) {
-                suite->end = suite->begin;
-                for (;;) {
-                    unit_test *test = va_arg(tests, unit_test *);
-                    if (!test) break;
-                    *suite->end++ = test;
-                }
+                suite->end = suite->begin + count;
+                memcpy(suite->begin, tests, size);
             } else {
-                log_error("can't alloc tests for unit_suite %s", name);
+                log_error("can't alloc tests for unit_suite");
                 suite->begin = suite->end = NULL;
                 test_free(test);
                 test = NULL;
@@ -99,12 +91,10 @@ unit_test *test_suite_alloc(const char *name, ...) {
         } else {
             suite->begin = suite->end = NULL;
         }
-        
-        va_end(tests);
     } else {
         test_free(test);
         test = NULL;
-        log_error("can't alloc unit_suite %s", name);
+        log_error("can't alloc unit_suite");
     }
     return test;
 }

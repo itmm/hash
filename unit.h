@@ -17,7 +17,6 @@
     typedef void (executor)(unit_state *test);
 
     typedef struct unit_test {
-        const char *name;
         void *context;
         executor *setup;
         executor *run;
@@ -26,9 +25,9 @@
     } unit_test;
 
 
-    unit_test *test_alloc(const char *name, executor run);
-    unit_test *test_full_alloc(const char *name, executor setup, executor run, executor teardown);
-    unit_test *test_suite_alloc(const char *name, ...); // consumes tests
+    unit_test *test_alloc(executor run);
+    unit_test *test_full_alloc(executor setup, executor run, executor teardown);
+    unit_test *test_suite_alloc(size_t count, unit_test *tests[count]); // consumes tests
     void test_free(unit_test *test);
 
     void test_run(unit_test *test, unit_state *state);

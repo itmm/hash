@@ -38,7 +38,7 @@ void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc) {
     return result;
 }
 
-typedef void (wrapped_fn)(void *rc, struct rc *r);
+typedef void *(wrapped_fn)(void *rc, struct rc *r);
 
 static inline void *_assert(void *rc, wrapped_fn wrapped) {
     if (!rc) { return NULL; }
@@ -51,25 +51,28 @@ static inline void *_assert(void *rc, wrapped_fn wrapped) {
         log_error("object %p retained too many times (will leak)", rc);
     }
     else {
-        wrapped(rc, r);
+        rc = wrapped(rc, r);
     }
     
     return rc;
 }
 
-static void _rc_retain(void *rc, struct rc *r) {
+static inline void *_rc_retain(void *rc, struct rc *r) {
     ++r->count;
+    return rc;
 }
 
 void *rc_retain(void *rc) {
     return _assert(rc, _rc_retain);
 }
 
-static inline void _rc_release(void *rc, struct rc *r) {
+static inline void *_rc_release(void *rc, struct rc *r) {
     if (!--r->count) {
         if (r->dealloc) { r->dealloc(rc); }
         free(r);
+        return NULL;
     }
+    return rc;
 }
 
 void *rc_release(void *rc) {
