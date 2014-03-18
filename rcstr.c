@@ -33,12 +33,16 @@ rcstr rcstr_dups(size_t count, const char *srcs[count]) {
     return result;
 }
 
+rcstr rcstr2str(rcstr str) {
+    if (!str) { return rcstr_dup(""); }
+    if (strchr(str, ':')) { return rcstr_dups(3, (const char *[]) { "[", str, "]" } ); }
+    return rc_retain(str);
+}
+
 rcstr rc2str(void *rc) {
-    if (!rc) {
-        return rcstr_dup("");
-    }
+    if (!rc) { return rcstr_dup(""); }
     switch (rc_get_type(rc)) {
-        case rc_type_string: return rc_retain(rc);
+        case rc_type_string: return rcstr2str(rc);
         case rc_type_list: return rclist2str((rclist *) rc);
         default:
             log_error("can't stringify type %d", (int) rc_get_type(rc));

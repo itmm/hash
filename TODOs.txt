@@ -2,8 +2,13 @@ o   reference counting hash
 o   reference counting int
 o   string representation of int
 o   string representation of hash
-o   strings escapen
+o   strings escapen, wenn whitespace
+o   strings escapen, wenn quotes
+o   strings escapen, wenn klammern
+o   loops in lists erkennen
+o   loops in hashes erkennen
 
+x   strings escapen, wenn colon
 x   string representation of list
 x   reference counting list
 x   reference counting type
