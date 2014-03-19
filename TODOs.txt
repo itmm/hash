@@ -5,6 +5,7 @@ o   string representation of hash
 o   loops in lists erkennen
 o   loops in hashes erkennen
 
+x   knoten in t_rclist schöner erzeugen
 x   mismatching quotes in string escapen
 x   backslash in string escapen
 x   strings escapen, wenn whitespace
