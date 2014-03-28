@@ -5,8 +5,11 @@
         #include "rcstr.h"
     #endif
 
-    void *rcint_alloc(int value);
+    typedef void *rcint;
 
-    rcstr *rcint2str(void *rcint);
+    rcint rcint_alloc(int value);
+
+    int rcint_value(rcint ri);
+    rcstr rcint2str(rcint ri);
 
 #endif

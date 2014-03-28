@@ -12,7 +12,7 @@
 
 static void _simple(unit_state *state) {
     void *a = rcint_alloc(42);
-    assert_eq(state, 42, *((int *) a));
+    assert_eq(state, 42, rcint_value(a));
     rc_release(a);
 }
 

@@ -12,12 +12,17 @@ void *rcint_alloc(int value) {
     return result;
 }
 
-rcstr *rcint2str(void *rcint) {
+int rcint_value(rcint ri) {
+    return_value_unless(ri, 0);
+    return *((int *) ri);
+}
+
+rcstr rcint2str(rcint ri) {
     static char buffer[32];
     char *cur = buffer + sizeof(buffer);
     *--cur = 0;
     
-    int value = *((int *) rcint);
+    int value = rcint_value(ri);
     if (value < 0) {
         for (;;) {
             *--cur = (10 - (value % 10)) % 10 + '0';
