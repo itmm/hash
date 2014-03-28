@@ -6,6 +6,7 @@
 #include "log.h"
 #include "rc.h"
 #include "rclist.h"
+#include "rcint.h"
 
 rcstr rcstr_dup(const char *src) {
     return rcstr_dups(1, (const char *[]) { src });
@@ -145,7 +146,8 @@ rcstr rc2str(void *rc) {
     if (!rc) { return rcstr_dup(""); }
     switch (rc_get_type(rc)) {
         case rc_type_string: return rcstr2str(rc);
-        case rc_type_list: return rclist2str((rclist *) rc);
+        case rc_type_list: return rclist2str(rc);
+        case rc_type_int: return rcint2str(rc);
         default:
             log_error("can't stringify type %d", (int) rc_get_type(rc));
             return rcstr_dup("???");

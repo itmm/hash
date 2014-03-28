@@ -31,7 +31,7 @@ static void _empty_list(unit_state *state) {
 static void _test_str(unit_state *state, rclist *lst, const char *expected) {
     return_unless(lst);
     
-    rcstr got = rclist2str(lst);
+    rcstr got = rc2str(lst);
     return_unless(got);
     
     rc_release(lst);

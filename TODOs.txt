@@ -1,5 +1,4 @@
 o   reference counting hash
-o   string representation of int
 o   string representation of hash
 o   loops in lists erkennen
 o   loops in hashes erkennen
