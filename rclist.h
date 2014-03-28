@@ -5,14 +5,14 @@
         #include "rcstr.h"
     #endif
 
-    typedef struct {
-        void *key;
-        void *value;
-        void *next;
-    } rclist;
+    typedef void *rclist;
 
-    rclist *rclist_cons(void *key, void *value, void *next);
+    rclist rclist_cons(void *key, void *value, void *next);
 
-    rcstr rclist2str(rclist *lst);
+    void *rclist_key(rclist lst);
+    void *rclist_value(rclist lst);
+    void *rclist_next(rclist lst);
+
+    rcstr rclist2str(rclist lst);
 
 #endif

@@ -7,10 +7,10 @@
 
 #pragma mark - tests
 
-static rclist *create_node(const char *key, const char *value, void *next) {
+static rclist create_node(const char *key, const char *value, void *next) {
     rcstr rckey = key ? rcstr_dup(key) : NULL;
     rcstr rcvalue = value ? rcstr_dup(value) : NULL;
-    rclist *result = rclist_cons(rckey, rcvalue, next);
+    rclist result = rclist_cons(rckey, rcvalue, next);
     rc_release(rckey);
     rc_release(rcvalue);
     return_value_unless(result, NULL);
@@ -21,9 +21,9 @@ static void _empty_list(unit_state *state) {
     rclist *lst = create_node(NULL, NULL, NULL);
     return_unless(lst);
 
-    assert_eq(state, NULL, lst->key);
-    assert_eq(state, NULL, lst->value);
-    assert_eq(state, NULL, lst->next);
+    assert_eq(state, NULL, rclist_key(lst));
+    assert_eq(state, NULL, rclist_value(lst));
+    assert_eq(state, NULL, rclist_next(lst));
 
     rc_release(lst);
 }
@@ -47,9 +47,9 @@ static void _simple_list(unit_state *state) {
     rclist *lst = create_node("key", "value", NULL);
     return_unless(lst);
     
-    assert_eq_str(state, "key", rcstr_str(lst->key));
-    assert_eq_str(state, "value", rcstr_str(lst->value));
-    assert_eq(state, NULL, lst->next);
+    assert_eq_str(state, "key", rcstr_str(rclist_key(lst)));
+    assert_eq_str(state, "value", rcstr_str(rclist_value(lst)));
+    assert_eq(state, NULL, rclist_next(lst));
 
     rc_release(lst);
 }
