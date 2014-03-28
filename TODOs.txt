@@ -16,6 +16,7 @@ o   compare lists
 o   compare true
 o   compare false
 
+x   hash value for string
 x   hash value for int
 x   readonly access to list properties
 x   accessor for string

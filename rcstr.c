@@ -1,5 +1,6 @@
 #include "rcstr.h"
 
+#include <limits.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -158,3 +159,14 @@ rcstr rc2str(void *rc) {
             return rcstr_dup("???");
     }
 }
+
+int rcstr_hash(rcstr rs) {
+    const char *cur = rcstr_str(rs);
+    return_value_unless(cur, 0);
+    int result = 0;
+    for (; *cur; ++cur) {
+        result = result * 17 + *cur;
+    }
+    return result & INT_MAX;
+}
+

@@ -11,5 +11,6 @@
     const char *rcstr_str(rcstr rs);
 
     rcstr rc2str(void *rc);
+    int rcstr_hash(rcstr rs);
 
 #endif

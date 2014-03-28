@@ -88,10 +88,20 @@ static void _closing_quote(unit_state *state) {
     _test_quote(state, "]", "[\\]]");
 }
 
+static void _simple_strings_have_different_hash(unit_state *state) {
+    rcstr a = rcstr_dup("a");
+    rcstr b = rcstr_dup("b");
+    int ha = rc_hash(a);
+    int hb = rc_hash(b);
+    rc_release(a);
+    rc_release(b);
+    assert(state, ha != hb, "hashes failed: %d == %d", ha, hb);
+}
+
 #pragma mark - suite
 
 unit_test *create_rcstr_tests() {
-    return test_suite_alloc(17, (unit_test *[]) {
+    return test_suite_alloc(18, (unit_test *[]) {
         test_alloc(_empty_string),
         test_alloc(_some_string),
         test_alloc(_simple_quote),
@@ -108,6 +118,7 @@ unit_test *create_rcstr_tests() {
         test_alloc(_unmatched_closing_quote),
         test_alloc(_inverse_quotes),
         test_alloc(_opening_quote),
-        test_alloc(_closing_quote)
+        test_alloc(_closing_quote),
+        test_alloc(_simple_strings_have_different_hash)
     });
 }
