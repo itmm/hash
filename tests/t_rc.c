@@ -55,14 +55,20 @@ static void _release_NULL(unit_state *state) {
     assert_eq(state, 0, _dealloc_count);
 }
 
+static void _hash_NULL(unit_state *state) {
+    assert_eq(state, 0, rc_hash(NULL));
+}
+
+
 #pragma mark - suite
 
 unit_test *create_rc_tests() {
-    return test_suite_alloc(5, (unit_test *[]) {
+    return test_suite_alloc(6, (unit_test *[]) {
          test_full_alloc(_init_counter, _simple, NULL),
         test_full_alloc(_init_counter, _retain_avoids_dealloc, NULL),
         test_full_alloc(_init_counter, _retain_needs_double_release, NULL),
         test_full_alloc(_init_counter, _retain_NULL, NULL),
-        test_full_alloc(_init_counter, _release_NULL, NULL)
+        test_full_alloc(_init_counter, _release_NULL, NULL),
+        test_alloc(_hash_NULL)
     });
 }

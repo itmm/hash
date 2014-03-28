@@ -87,7 +87,7 @@ rc_type rc_get_type(void *rc) {
 }
 
 int rc_hash(void *rc) {
-    return_value_unless(rc, 0);
+    if (!rc) { return 0; }
     switch (rc_get_type(rc)) {
         case rc_type_string: return rcstr_hash((rcstr) rc);
         case rc_type_int: return rcint_hash((rcint) rc);
