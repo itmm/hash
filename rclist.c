@@ -97,3 +97,10 @@ rcstr rclist2str(rclist lst) {
     return_value_unless(result, NULL);
     return result;
 }
+
+int rclist_hash(rclist lst) {
+    return_value_unless(lst, 0);
+    
+    rclist_internal *real = lst;
+    return rc_hash(real->key) + rc_hash(real->value) * 0x1007 + rc_hash(real->next) * 0x10000b;
+}

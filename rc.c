@@ -2,6 +2,7 @@
 
 #include "log.h"
 #include "rcint.h"
+#include "rclist.h"
 
 #include <limits.h>
 #include <stdlib.h>
@@ -91,6 +92,7 @@ int rc_hash(void *rc) {
     switch (rc_get_type(rc)) {
         case rc_type_string: return rcstr_hash((rcstr) rc);
         case rc_type_int: return rcint_hash((rcint) rc);
+        case rc_type_list: return rclist_hash((rclist) rc);
         default:
             log_error("can't hash type %d", (int) rc_get_type(rc));
             return 0;

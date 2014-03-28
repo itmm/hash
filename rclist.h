@@ -14,5 +14,6 @@
     void *rclist_next(rclist lst);
 
     rcstr rclist2str(rclist lst);
+    int rclist_hash(rclist lst);
 
 #endif

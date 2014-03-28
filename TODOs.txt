@@ -1,7 +1,5 @@
 o   reference counting hash
 o   string representation of hash
-o   hash value for string
-o   hash value for list
 o   hash value for hash
 o   reference counting true
 o   reference counting false
@@ -16,6 +14,7 @@ o   compare lists
 o   compare true
 o   compare false
 
+x   hash value for list
 x   hash value for string
 x   hash value for int
 x   readonly access to list properties
