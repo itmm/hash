@@ -1,6 +1,7 @@
 #include "rc.h"
 
 #include "log.h"
+#include "rcint.h"
 
 #include <limits.h>
 #include <stdlib.h>
@@ -83,4 +84,14 @@ rc_type rc_get_type(void *rc) {
     return_value_unless(rc, rc_type_unknown);
     struct rc *r = rc - padded_rc_size();
     return r->type;
+}
+
+int rc_hash(void *rc) {
+    return_value_unless(rc, 0);
+    switch (rc_get_type(rc)) {
+        case rc_type_int: return rcint_hash((rcint) rc);
+        default:
+            log_error("can't hash type %d", (int) rc_get_type(rc));
+            return 0;
+    }
 }

@@ -3,6 +3,7 @@
 #include "log.h"
 #include "rc.h"
 
+#include <limits.h>
 #include <stdbool.h>
 
 void *rcint_alloc(int value) {
@@ -15,6 +16,10 @@ void *rcint_alloc(int value) {
 int rcint_value(rcint ri) {
     return_value_unless(ri, 0);
     return *((int *) ri);
+}
+
+int rcint_hash(rcint ri) {
+    return rcint_value(ri) & INT_MAX;
 }
 
 rcstr rcint2str(rcint ri) {

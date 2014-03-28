@@ -1,6 +1,22 @@
 o   reference counting hash
 o   string representation of hash
+o   hash value for string
+o   hash value for list
+o   hash value for hash
+o   reference counting true
+o   reference counting false
+o   string representation of true
+o   string representation of false
+o   hash value for true
+o   hash value for false
+o   compare ints
+o   compare strings
+o   compare hashs
+o   compare lists
+o   compare true
+o   compare false
 
+x   hash value for int
 x   readonly access to list properties
 x   accessor for string
 x   accessor for int

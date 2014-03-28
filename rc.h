@@ -17,6 +17,8 @@
     void *rc_retain(void *rc);
     void *rc_release(void *rc);
 
+    int rc_hash(void *rc);
+
     rc_type rc_get_type(void *rc);
 
 #endif

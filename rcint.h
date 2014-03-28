@@ -10,6 +10,8 @@
     rcint rcint_alloc(int value);
 
     int rcint_value(rcint ri);
+
+    int rcint_hash(rcint ri);
     rcstr rcint2str(rcint ri);
 
 #endif
