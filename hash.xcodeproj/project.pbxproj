@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7090ADB018E5846B008A91C3 /* t_rcint.c in Sources */ = {isa = PBXBuildFile; fileRef = 7090ADAF18E5846B008A91C3 /* t_rcint.c */; };
+		7090ADB318E585D9008A91C3 /* rcint.c in Sources */ = {isa = PBXBuildFile; fileRef = 7090ADB218E585D9008A91C3 /* rcint.c */; };
 		7097B5DB18D7071E00730A24 /* rcstr.c in Sources */ = {isa = PBXBuildFile; fileRef = 7097B5DA18D7071E00730A24 /* rcstr.c */; };
 		7097B5DE18D708DA00730A24 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 7097B5DD18D708DA00730A24 /* main.c */; };
 		7097B5E418D70A3000730A24 /* t_log.c in Sources */ = {isa = PBXBuildFile; fileRef = 7097B5E218D70A3000730A24 /* t_log.c */; };
@@ -44,6 +46,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7090ADAE18E5845D008A91C3 /* t_rcint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = t_rcint.h; path = tests/t_rcint.h; sourceTree = SOURCE_ROOT; };
+		7090ADAF18E5846B008A91C3 /* t_rcint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t_rcint.c; sourceTree = SOURCE_ROOT; };
+		7090ADB118E585BB008A91C3 /* rcint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcint.h; sourceTree = "<group>"; };
+		7090ADB218E585D9008A91C3 /* rcint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rcint.c; sourceTree = "<group>"; };
 		7097B5DA18D7071E00730A24 /* rcstr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rcstr.c; sourceTree = "<group>"; };
 		7097B5DC18D7072800730A24 /* rcstr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcstr.h; sourceTree = "<group>"; };
 		7097B5DD18D708DA00730A24 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = tests/main.c; sourceTree = SOURCE_ROOT; };
@@ -101,6 +107,8 @@
 				70E43C1F18D09B7500C4AF92 /* rc.c */,
 				7097B5DC18D7072800730A24 /* rcstr.h */,
 				7097B5DA18D7071E00730A24 /* rcstr.c */,
+				7090ADB118E585BB008A91C3 /* rcint.h */,
+				7090ADB218E585D9008A91C3 /* rcint.c */,
 				7097B5F118D7348900730A24 /* rclist.h */,
 				7097B5F218D7349400730A24 /* rclist.c */,
 				70E43C2F18D208AF00C4AF92 /* tests */,
@@ -128,6 +136,8 @@
 				7097B5F518D738F900730A24 /* t_rclist.c */,
 				7097B5E518D70AC100730A24 /* t_rcstr.h */,
 				7097B5E618D70AD100730A24 /* t_rcstr.c */,
+				7090ADAE18E5845D008A91C3 /* t_rcint.h */,
+				7090ADAF18E5846B008A91C3 /* t_rcint.c */,
 				7097B5EE18D71EBF00730A24 /* t_unit.h */,
 				7097B5EF18D71ECD00730A24 /* t_unit.c */,
 				7097B5DD18D708DA00730A24 /* main.c */,
@@ -217,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				70E43C2618D1B0BB00C4AF92 /* unit.c in Sources */,
+				7090ADB318E585D9008A91C3 /* rcint.c in Sources */,
 				70E43C2318D0AA5C00C4AF92 /* log.c in Sources */,
 				7097B5DB18D7071E00730A24 /* rcstr.c in Sources */,
 				70E43C2018D09B7500C4AF92 /* rc.c in Sources */,
@@ -233,6 +244,7 @@
 				7097B5E718D70AD100730A24 /* t_rcstr.c in Sources */,
 				7097B5F018D71ECD00730A24 /* t_unit.c in Sources */,
 				7097B5F318D7349400730A24 /* rclist.c in Sources */,
+				7090ADB018E5846B008A91C3 /* t_rcint.c in Sources */,
 				7097B5ED18D716FA00730A24 /* t_rc.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -6,6 +6,7 @@
 #include "t_rc.h"
 #include "t_rclist.h"
 #include "t_rcstr.h"
+#include "t_rcint.h"
 #include "t_unit.h"
 #include "unit.h"
 
@@ -18,6 +19,7 @@ int main(int argc, const char * argv[])
         create_rc_tests(),
         create_rclist_tests(),
         create_rcstr_tests(),
+        create_rcint_tests(),
         create_unit_tests(),
     });
     

@@ -1,10 +1,10 @@
 o   reference counting hash
-o   reference counting int
 o   string representation of int
 o   string representation of hash
 o   loops in lists erkennen
 o   loops in hashes erkennen
 
+x   reference counting int
 x   knoten in t_rclist schöner erzeugen
 x   mismatching quotes in string escapen
 x   backslash in string escapen
