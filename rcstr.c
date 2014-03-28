@@ -142,6 +142,11 @@ rcstr rcstr2str(rcstr str) {
     return result;
 }
 
+const char *rcstr_str(rcstr rs) {
+    return_value_unless(rs, NULL);
+    return rs;
+}
+
 rcstr rc2str(void *rc) {
     if (!rc) { return rcstr_dup(""); }
     switch (rc_get_type(rc)) {

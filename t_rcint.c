@@ -27,7 +27,7 @@ static void _test_str(unit_state *state, int expected) {
     static char buffer[16];
     snprintf(buffer, sizeof(buffer), "%d", expected);
     
-    assert_eq_str(state, buffer, got);
+    assert_eq_str(state, buffer, rcstr_str(got));
     rc_release(got);
 }
 

@@ -8,7 +8,7 @@
 
 static inline void _test_string(unit_state *state, const char *str) {
     rcstr rc = rcstr_dup(str);
-    assert_eq_str(state, str, rc);
+    assert_eq_str(state, str, rcstr_str(rc));
     rc_release(rc);
 }
 
@@ -16,7 +16,7 @@ static inline void _test_quote(unit_state *state, const char *str, const char *e
     rcstr rc = rcstr_dup(str);
     rcstr rep = rc2str(rc);
     rc_release(rc);
-    assert_eq_str(state, expected, rep);
+    assert_eq_str(state, expected, rcstr_str(rep));
     rc_release(rep);
 }
 

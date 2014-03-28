@@ -8,6 +8,8 @@
     rcstr rcstr_dup(const char *src);
     rcstr rcstr_dups(size_t count, const char *srcs[count]);
 
+    const char *rcstr_str(rcstr rs);
+
     rcstr rc2str(void *rc);
 
 #endif

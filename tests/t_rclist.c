@@ -35,7 +35,7 @@ static void _test_str(unit_state *state, rclist *lst, const char *expected) {
     return_unless(got);
     
     rc_release(lst);
-    assert_eq_str(state, expected, got);
+    assert_eq_str(state, expected, rcstr_str(got));
     rc_release(got);
 }
 
@@ -47,8 +47,8 @@ static void _simple_list(unit_state *state) {
     rclist *lst = create_node("key", "value", NULL);
     return_unless(lst);
     
-    assert_eq_str(state, "key", lst->key);
-    assert_eq_str(state, "value", lst->value);
+    assert_eq_str(state, "key", rcstr_str(lst->key));
+    assert_eq_str(state, "value", rcstr_str(lst->value));
     assert_eq(state, NULL, lst->next);
 
     rc_release(lst);
