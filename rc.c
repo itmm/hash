@@ -98,3 +98,21 @@ int rc_hash(void *rc) {
             return 0;
     }
 }
+
+void *rc_true() {
+    static void *_singleton = NULL;
+    if (!_singleton) {
+        _singleton = rc_alloc(0, rc_type_true, NULL);
+        return_value_unless(_singleton, NULL);
+    }
+    return rc_retain(_singleton);
+}
+
+void *rc_false() {
+    static void *_singleton = NULL;
+    if (!_singleton) {
+        _singleton = rc_alloc(0, rc_type_false, NULL);
+        return_value_unless(_singleton, NULL);
+    }
+    return rc_retain(_singleton);
+}
