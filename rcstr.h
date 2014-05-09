@@ -3,14 +3,14 @@
 
     #include <stdlib.h>
     
-    typedef void *rcstr;
+    typedef struct rcstr rcstr;
 
-    rcstr rcstr_dup(const char *src);
-    rcstr rcstr_dups(size_t count, const char *srcs[count]);
+    rcstr *rcstr_dup(const char *src);
+    rcstr *rcstr_dups(size_t count, const char *srcs[count]);
 
-    const char *rcstr_str(rcstr rs);
+    const char *rcstr_str(rcstr *rs);
 
-    rcstr rc2str(void *rc);
-    int rcstr_hash(rcstr rs);
+    rcstr *rc2str(void *rc);
+    int rcstr_hash(rcstr *rs);
 
 #endif

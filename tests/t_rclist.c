@@ -7,10 +7,10 @@
 
 #pragma mark - tests
 
-static rclist create_node(const char *key, const char *value, void *next) {
-    rcstr rckey = key ? rcstr_dup(key) : NULL;
-    rcstr rcvalue = value ? rcstr_dup(value) : NULL;
-    rclist result = rclist_cons(rckey, rcvalue, next);
+static rclist *create_node(const char *key, const char *value, void *next) {
+    rcstr *rckey = key ? rcstr_dup(key) : NULL;
+    rcstr *rcvalue = value ? rcstr_dup(value) : NULL;
+    rclist *result = rclist_cons(rckey, rcvalue, next);
     rc_release(rckey);
     rc_release(rcvalue);
     return_value_unless(result, NULL);
@@ -18,7 +18,7 @@ static rclist create_node(const char *key, const char *value, void *next) {
 }
 
 static void _empty_list(unit_state *state) {
-    rclist lst = create_node(NULL, NULL, NULL);
+    rclist *lst = create_node(NULL, NULL, NULL);
     return_unless(lst);
 
     assert_eq(state, NULL, rclist_key(lst));
@@ -31,7 +31,7 @@ static void _empty_list(unit_state *state) {
 static void _test_str(unit_state *state, rclist *lst, const char *expected) {
     return_unless(lst);
     
-    rcstr got = rc2str(lst);
+    rcstr *got = rc2str(lst);
     return_unless(got);
     
     rc_release(lst);
@@ -44,7 +44,7 @@ static void _empty_list_string(unit_state *state) {
 }
 
 static void _simple_list(unit_state *state) {
-    rclist lst = create_node("key", "value", NULL);
+    rclist *lst = create_node("key", "value", NULL);
     return_unless(lst);
     
     assert_eq_str(state, "key", rcstr_str(rclist_key(lst)));
@@ -59,13 +59,13 @@ static void _simple_list_string(unit_state *state) {
 }
 
 static void _strange_list_string(unit_state *state) {
-    rcstr rest = rcstr_dup("rest");
+    rcstr *rest = rcstr_dup("rest");
     _test_str(state, create_node("key", "value", rest), "key:value . rest");
     rc_release(rest);
 }
 
 static void _double_list_string(unit_state *state) {
-    rclist tail = create_node("a", "x", NULL);
+    rclist *tail = create_node("a", "x", NULL);
     _test_str(state, create_node("b", "y", tail), "b:y a:x");
     rc_release(tail);
 }
@@ -75,15 +75,15 @@ static void _colon_key(unit_state *state) {
 }
 
 static void _hash_of_empty_list(unit_state *state) {
-    rclist lst = create_node(NULL, NULL, NULL);
+    rclist *lst = create_node(NULL, NULL, NULL);
     int h = rc_hash(lst);
     rc_release(lst);
     assert_eq(state, 0, h);
 }
 
 static void _different_hash_for_different_keys(unit_state *state) {
-    rclist a = create_node("a", NULL, NULL);
-    rclist b = create_node("b", NULL, NULL);
+    rclist *a = create_node("a", NULL, NULL);
+    rclist *b = create_node("b", NULL, NULL);
     int ha = rc_hash(a);
     rc_release(a);
     int hb = rc_hash(b);

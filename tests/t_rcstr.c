@@ -7,14 +7,14 @@
 #pragma mark - tests
 
 static inline void _test_string(unit_state *state, const char *str) {
-    rcstr rc = rcstr_dup(str);
+    rcstr *rc = rcstr_dup(str);
     assert_eq_str(state, str, rcstr_str(rc));
     rc_release(rc);
 }
 
 static inline void _test_quote(unit_state *state, const char *str, const char *expected) {
-    rcstr rc = rcstr_dup(str);
-    rcstr rep = rc2str(rc);
+    rcstr *rc = rcstr_dup(str);
+    rcstr *rep = rc2str(rc);
     rc_release(rc);
     assert_eq_str(state, expected, rcstr_str(rep));
     rc_release(rep);
@@ -89,8 +89,8 @@ static void _closing_quote(unit_state *state) {
 }
 
 static void _simple_strings_have_different_hash(unit_state *state) {
-    rcstr a = rcstr_dup("a");
-    rcstr b = rcstr_dup("b");
+    rcstr *a = rcstr_dup("a");
+    rcstr *b = rcstr_dup("b");
     int ha = rc_hash(a);
     int hb = rc_hash(b);
     rc_release(a);

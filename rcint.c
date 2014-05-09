@@ -6,23 +6,27 @@
 #include <limits.h>
 #include <stdbool.h>
 
-void *rcint_alloc(int value) {
-    int *result = rc_alloc(sizeof(int), rc_type_int, NULL);
+struct rcint {
+    int value;
+};
+
+rcint *rcint_alloc(int value) {
+    rcint *result = rc_alloc(sizeof(int), rc_type_int, NULL);
     return_value_unless(result, NULL);
-    *result = value;
+    result->value = value;
     return result;
 }
 
-int rcint_value(rcint ri) {
+int rcint_value(rcint *ri) {
     return_value_unless(ri, 0);
-    return *((int *) ri);
+    return ri->value;
 }
 
-int rcint_hash(rcint ri) {
-    return rcint_value(ri) & INT_MAX;
+int rcint_hash(rcint *ri) {
+    return ri->value & INT_MAX;
 }
 
-rcstr rcint2str(rcint ri) {
+rcstr *rcint2str(rcint *ri) {
     static char buffer[32];
     char *cur = buffer + sizeof(buffer);
     *--cur = 0;

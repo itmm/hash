@@ -11,16 +11,16 @@
 #pragma mark - tests
 
 static void _simple(unit_state *state) {
-    rcint a = rcint_alloc(42);
+    rcint *a = rcint_alloc(42);
     assert_eq(state, 42, rcint_value(a));
     rc_release(a);
 }
 
 static void _test_str(unit_state *state, int expected) {
-    rcint a = rcint_alloc(expected);
+    rcint *a = rcint_alloc(expected);
     return_unless(a);
     
-    rcstr got = rc2str(a);
+    rcstr *got = rc2str(a);
     return_unless(got);
     rc_release(a);
     
@@ -44,12 +44,12 @@ static void _min_str(unit_state *state) {
 }
 
 static void _hash_pos(unit_state *state) {
-    rcint a = rcint_alloc(42);
+    rcint *a = rcint_alloc(42);
     assert_eq(state, 42, rc_hash(a));
 }
 
 static void _hash_neg(unit_state *state) {
-    rcint a = rcint_alloc(-42);
+    rcint *a = rcint_alloc(-42);
     assert_eq(state, -42 & INT_MAX, rc_hash(a));
 }
 

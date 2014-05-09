@@ -5,13 +5,13 @@
         #include "rcstr.h"
     #endif
 
-    typedef void *rcint;
+    typedef struct rcint rcint;
 
-    rcint rcint_alloc(int value);
+    rcint *rcint_alloc(int value);
 
-    int rcint_value(rcint ri);
+    int rcint_value(rcint *ri);
 
-    int rcint_hash(rcint ri);
-    rcstr rcint2str(rcint ri);
+    int rcint_hash(rcint *ri);
+    rcstr *rcint2str(rcint *ri);
 
 #endif

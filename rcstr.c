@@ -9,11 +9,13 @@
 #include "rclist.h"
 #include "rcint.h"
 
-rcstr rcstr_dup(const char *src) {
+struct rcstr {};
+
+rcstr *rcstr_dup(const char *src) {
     return rcstr_dups(1, (const char *[]) { src });
 }
 
-rcstr rcstr_dups(size_t count, const char *srcs[count]) {
+rcstr *rcstr_dups(size_t count, const char *srcs[count]) {
     size_t length = 1;
     const char **begin = srcs;
     const char **end = begin + count;
@@ -62,11 +64,11 @@ bool has_matching_opening_quote(const char *cur, const char *prebegin) {
     return false;
 }
 
-rcstr rcstr2str(rcstr str) {
+rcstr *rcstr2str(rcstr *str) {
     if (!str) { return rcstr_dup(""); }
     
-    const char *cur = str;
-    const char *end = cur + strlen(str);
+    const char *cur = (const char *) str;
+    const char *end = cur + strlen(cur);
     
     char *out_begin = NULL;
     char *out = NULL;
@@ -129,13 +131,13 @@ rcstr rcstr2str(rcstr str) {
         if (out) { *out++ = ch; };
     }
     
-    rcstr result;
+    rcstr *result;
     if (out) {
         *out = 0;
         result = rcstr_dups(3, (const char *[]) { "[", out_begin, "]" });
         free(out_begin);
     } else if (needs_escape) {
-        result = rcstr_dups(3, (const char *[]) { "[", str, "]" } );
+        result = rcstr_dups(3, (const char *[]) { "[", (const char *) str, "]" } );
     } else {
         result = rc_retain(str);
     }
@@ -143,12 +145,12 @@ rcstr rcstr2str(rcstr str) {
     return result;
 }
 
-const char *rcstr_str(rcstr rs) {
+const char *rcstr_str(rcstr *rs) {
     return_value_unless(rs, NULL);
-    return rs;
+    return (const char *) rs;
 }
 
-rcstr rc2str(void *rc) {
+rcstr *rc2str(void *rc) {
     if (!rc) { return rcstr_dup(""); }
     switch (rc_get_type(rc)) {
         case rc_type_string: return rcstr2str(rc);
@@ -162,7 +164,7 @@ rcstr rc2str(void *rc) {
     }
 }
 
-int rcstr_hash(rcstr rs) {
+int rcstr_hash(rcstr *rs) {
     const char *cur = rcstr_str(rs);
     return_value_unless(cur, 0);
     int result = 0;

@@ -34,7 +34,7 @@ static void _hashes(unit_state *state) {
 }
 
 static void _names_match(unit_state *state, void *obj, const char *expected) {
-    rcstr name = rc2str(obj);
+    rcstr *name = rc2str(obj);
     assert_eq_str(state, rcstr_str(name), expected);
     rc_release(name);
     rc_release(obj);
