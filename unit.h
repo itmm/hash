@@ -5,34 +5,41 @@
 #include <stdbool.h>
 #include <string.h>
 
-#pragma mark - test management
+#pragma mark - state management
 
-    struct unit_state;
     typedef struct unit_state unit_state;
 
-    struct unit_test;
+    unit_state *state_alloc();
+    void state_free(unit_state *state);
+
+    void *state_context(unit_state *state);
+    void state_set_context(unit_state *state, void *context);
+    unsigned state_count(unit_state *state);
+    unsigned state_failed(unit_state *state);
+    bool state_succeeded(unit_state *state);
+
+    void test_summary(unit_state *state);
+
+
+#pragma mark - unit test
+
     typedef struct unit_test unit_test;
 
     typedef void (executor)(unit_state *test);
     typedef void (context_dealloc)(void *context);
 
-    unit_state *state_alloc();
-    void state_free(unit_state *state);
-    bool state_succeeded(unit_state *state);
-    void *state_context(unit_state *state);
-    unsigned state_count(unit_state *state);
-    unsigned state_failed(unit_state *state);
-
     unit_test *test_alloc(executor run);
     unit_test *test_alloc_with_context(executor run, void *context, context_dealloc deallocator);
     unit_test *test_alloc_with_wrappers(executor setup, executor run, executor teardown);
     unit_test *test_full_alloc(executor setup, executor run, executor teardown, void *context, context_dealloc deallocator);
-    unit_test *test_suite_alloc(size_t count, unit_test *tests[count]); // consumes tests
     void test_free(unit_test *test);
 
     void test_run(unit_test *test, unit_state *state);
 
-    void test_summary(unit_state *state);
+
+#pragma mark - suites
+
+    unit_test *test_suite_alloc(size_t count, unit_test *tests[count]); // consumes tests
 
 
 #pragma mark - assertions
@@ -51,5 +58,6 @@
         const char *function,
         const char *format, ...
     ) __attribute__((format(printf, 6, 7)));
+
 
 #endif

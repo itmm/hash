@@ -93,6 +93,8 @@ int rc_hash(void *rc) {
         case rc_type_string: return rcstr_hash((rcstr) rc);
         case rc_type_int: return rcint_hash((rcint) rc);
         case rc_type_list: return rclist_hash((rclist) rc);
+        case rc_type_false: return 0;
+        case rc_type_true: return 1;
         default:
             log_error("can't hash type %d", (int) rc_get_type(rc));
             return 0;

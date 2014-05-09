@@ -6,27 +6,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-    struct unit_state {
-        void *context;
-        unsigned count;
-        unsigned failed;
-        jmp_buf env;
-    };
+#pragma mark - state management
 
-    typedef void (executor)(unit_state *test);
-
-    struct unit_test {
-        void *context;
-        executor *setup;
-        executor *run;
-        executor *teardown;
-        void (*dealloc)(void *context);
-    };
-
-typedef struct {
-    unit_test **begin;
-    unit_test **end;
-} unit_suite_context;
+struct unit_state {
+    void *context;
+    unsigned count;
+    unsigned failed;
+    jmp_buf env;
+};
 
 unit_state *state_alloc() {
     unit_state *state = malloc(sizeof(unit_state));
@@ -39,19 +26,6 @@ void state_free(unit_state *state) {
     free(state);
 }
 
-bool state_succeeded(unit_state *state) {
-    return state_failed(state) == 0 && state_count(state);
-}
-
-unsigned state_count(unit_state *state) {
-    return_value_unless(state, 0);
-    return state->count;
-}
-
-unsigned state_failed(unit_state *state) {
-    return_value_unless(state, 0);
-    return state->failed;
-}
 
 void *state_context(unit_state *state) {
     return_value_unless(state, NULL);
@@ -63,34 +37,41 @@ void state_set_context(unit_state *state, void *context) {
     state->context = context;
 }
 
-static void _test_suite_run(unit_state *state) {
+
+unsigned state_count(unit_state *state) {
+    return_value_unless(state, 0);
+    return state->count;
+}
+
+unsigned state_failed(unit_state *state) {
+    return_value_unless(state, 0);
+    return state->failed;
+}
+
+bool state_succeeded(unit_state *state) {
+    return state_failed(state) == 0 && state_count(state);
+}
+
+
+void test_summary(unit_state *state) {
     return_unless(state);
-
-    --state->count; // suite is no test
-    
-    unit_suite_context *suite = state->context;
-    return_unless(suite);
-    for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
-        if (*cur) {
-            test_run(*cur, state);
-        } else {
-            log_error_with_handler(log_default_handler, "test in suite is NULL");
-        }
+    if (state->failed) {
+        printf("%u UNIT-TESTS FAILED (from %u tests)\n", state->failed, state->count);
+    } else {
+        printf("all %u tests passed.\n", state->count);
     }
 }
 
-static void _test_suite_dealloc(void *context) {
-    return_unless(context);
-    
-    unit_suite_context *suite = context;
-    if (suite->begin) {
-        for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
-            test_free(*cur);
-        }
-        free(suite->begin);
-    }
-    free(context);
-}
+
+#pragma mark - unit test
+
+struct unit_test {
+    void *context;
+    executor *setup;
+    executor *run;
+    executor *teardown;
+    void (*dealloc)(void *context);
+};
 
 unit_test *test_alloc(executor run) {
     return test_full_alloc(NULL, run, NULL, NULL, NULL);
@@ -119,13 +100,65 @@ unit_test *test_full_alloc(executor setup, executor run, executor teardown, void
     return result;
 }
 
-size_t number_of_tests(va_list tests) {
-    va_list tmp;
-    va_copy(tmp, tests);
-        
-    size_t count = 0;
-    for (; va_arg(tmp, unit_test *); ++count) {}
-    return count;
+void test_free(unit_test *test) {
+    return_unless(test);
+
+    if (test->dealloc) {
+        test->dealloc(test->context);
+    }
+    free(test);
+}
+
+
+void test_run(unit_test *test, unit_state *state) {
+    return_unless(state);
+    return_unless(test);
+
+    state->context = test->context;
+    ++state->count;
+    
+    if (test->setup) test->setup(state);
+    if (!setjmp(state->env)) {
+        if (test->run) test->run(state);
+    }
+    if (test->teardown) test->teardown(state);
+}
+
+
+#pragma mark - suites
+
+typedef struct {
+    unit_test **begin;
+    unit_test **end;
+} unit_suite_context;
+
+static void _test_suite_run(unit_state *state) {
+    return_unless(state);
+
+    --state->count; // suite is no test
+    
+    unit_suite_context *suite = state->context;
+    return_unless(suite);
+    for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
+        if (*cur) {
+            test_run(*cur, state);
+        } else {
+            log_error_with_handler(log_default_handler, "test in suite is NULL");
+        }
+    }
+}
+
+static void _test_suite_dealloc(void *context) {
+    return_unless(context);
+    
+    unit_suite_context *suite = context;
+    if (suite->begin) {
+        for (unit_test **cur = suite->begin; cur != suite->end; ++cur) {
+            test_free(*cur);
+        }
+        free(suite->begin);
+    }
+    free(context);
 }
 
 unit_test *test_suite_alloc(size_t count, unit_test *tests[count]) {
@@ -158,38 +191,8 @@ unit_test *test_suite_alloc(size_t count, unit_test *tests[count]) {
     return test;
 }
 
-void test_free(unit_test *test) {
-    return_unless(test);
 
-    if (test->dealloc) {
-        test->dealloc(test->context);
-    }
-    free(test);
-}
-
-void test_run(unit_test *test, unit_state *state) {
-    return_unless(state);
-    return_unless(test);
-
-    state->context = test->context;
-    ++state->count;
-    
-    if (test->setup) test->setup(state);
-    if (!setjmp(state->env)) {
-        if (test->run) test->run(state);
-    }
-    if (test->teardown) test->teardown(state);
-}
-
-void test_summary(unit_state *state) {
-    return_unless(state);
-    if (state->failed) {
-        printf("%u UNIT-TESTS FAILED (from %u tests)\n", state->failed, state->count);
-    } else {
-        printf("all %u tests passed.\n", state->count);
-    }
-}
-
+#pragma mark - assertions
 
 void test_assert(unit_state *state, bool condition, const char *file, int line, const char *function, const char *format, ...) {
     if (!condition) {
@@ -204,4 +207,3 @@ void test_assert(unit_state *state, bool condition, const char *file, int line, 
         longjmp(state->env, 1);
     }
 }
-

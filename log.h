@@ -13,11 +13,11 @@
         log_message_with_handler(handler, __FILE__, __LINE__, __func__, "ERROR", __VA_ARGS__)
 
     #define return_unless(param) if (!(param)) { \
-        log_message(__FILE__, __LINE__, __func__, "ERROR", #param " must not be NULL"); \
+        log_message(__FILE__, __LINE__, __func__, "ERROR", #param " must be set"); \
         return; \
     }
     #define return_value_unless(param, ret_val) if (!(param)) { \
-        log_message(__FILE__, __LINE__, __func__, "ERROR", #param " must not be NULL"); \
+        log_message(__FILE__, __LINE__, __func__, "ERROR", #param " must be set"); \
         return ret_val; \
     }
 
