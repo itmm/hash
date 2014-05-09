@@ -154,6 +154,8 @@ rcstr rc2str(void *rc) {
         case rc_type_string: return rcstr2str(rc);
         case rc_type_list: return rclist2str(rc);
         case rc_type_int: return rcint2str(rc);
+        case rc_type_true: return rcstr_dup("true");
+        case rc_type_false: return rcstr_dup("false");
         default:
             log_error("can't stringify type %d", (int) rc_get_type(rc));
             return rcstr_dup("???");
