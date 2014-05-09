@@ -64,11 +64,11 @@ static void _hash_NULL(unit_state *state) {
 
 unit_test *create_rc_tests() {
     return test_suite_alloc(6, (unit_test *[]) {
-         test_full_alloc(_init_counter, _simple, NULL),
-        test_full_alloc(_init_counter, _retain_avoids_dealloc, NULL),
-        test_full_alloc(_init_counter, _retain_needs_double_release, NULL),
-        test_full_alloc(_init_counter, _retain_NULL, NULL),
-        test_full_alloc(_init_counter, _release_NULL, NULL),
+        test_alloc_with_wrappers(_init_counter, _simple, NULL),
+        test_alloc_with_wrappers(_init_counter, _retain_avoids_dealloc, NULL),
+        test_alloc_with_wrappers(_init_counter, _retain_needs_double_release, NULL),
+        test_alloc_with_wrappers(_init_counter, _retain_NULL, NULL),
+        test_alloc_with_wrappers(_init_counter, _release_NULL, NULL),
         test_alloc(_hash_NULL)
     });
 }

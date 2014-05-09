@@ -29,10 +29,14 @@ int main(int argc, const char * argv[])
         log_error("can't alloc suite");
         exit(EXIT_FAILURE);
     }
-    unit_state state = {0};
-    test_run(suite, &state);
-    test_summary(&state);
-    test_free(suite);
+    unit_state *state = state_alloc();
+    if (state) {
+        test_run(suite, state);
+        test_summary(state);
+        test_free(suite);
     
-    exit(state.failed ? EXIT_FAILURE : EXIT_SUCCESS);
+        exit(state_succeeded(state) ? EXIT_SUCCESS : EXIT_FAILURE);
+    
+        state_free(state);
+    }
 }

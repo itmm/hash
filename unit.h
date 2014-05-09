@@ -7,26 +7,26 @@
 
 #pragma mark - test management
 
-    typedef struct {
-        void *context;
-        unsigned count;
-        unsigned failed;
-        jmp_buf env;
-    } unit_state;
+    struct unit_state;
+    typedef struct unit_state unit_state;
+
+    struct unit_test;
+    typedef struct unit_test unit_test;
 
     typedef void (executor)(unit_state *test);
+    typedef void (context_dealloc)(void *context);
 
-    typedef struct unit_test {
-        void *context;
-        executor *setup;
-        executor *run;
-        executor *teardown;
-        void (*dealloc)(void *context);
-    } unit_test;
-
+    unit_state *state_alloc();
+    void state_free(unit_state *state);
+    bool state_succeeded(unit_state *state);
+    void *state_context(unit_state *state);
+    unsigned state_count(unit_state *state);
+    unsigned state_failed(unit_state *state);
 
     unit_test *test_alloc(executor run);
-    unit_test *test_full_alloc(executor setup, executor run, executor teardown);
+    unit_test *test_alloc_with_context(executor run, void *context, context_dealloc deallocator);
+    unit_test *test_alloc_with_wrappers(executor setup, executor run, executor teardown);
+    unit_test *test_full_alloc(executor setup, executor run, executor teardown, void *context, context_dealloc deallocator);
     unit_test *test_suite_alloc(size_t count, unit_test *tests[count]); // consumes tests
     void test_free(unit_test *test);
 

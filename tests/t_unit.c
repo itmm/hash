@@ -28,16 +28,18 @@ typedef struct {
 static void run_test(unit_state *state) {
     return_unless(state);
     
-    runner_context *context = state->context;
+    runner_context *context = state_context(state);
     return_unless(context);
 
-    unit_state wrapped_state = {0};
-    disable_logging(&wrapped_state);
-    test_run(context->test, &wrapped_state);
-    reset_logging(&wrapped_state);
+    unit_state *wrapped_state = state_alloc();
+    disable_logging(wrapped_state);
+    test_run(context->test, wrapped_state);
+    reset_logging(wrapped_state);
     
-    assert_eq(state, context->expected_failures, wrapped_state.failed);
-    assert_eq(state, context->expected_count, wrapped_state.count);
+    assert_eq(state, context->expected_failures, state_failed(wrapped_state));
+    assert_eq(state, context->expected_count, state_count(wrapped_state));
+    
+    state_free(wrapped_state);
 }
 
 static void dealloc_wrapper_context(void *context) {
@@ -48,17 +50,16 @@ static void dealloc_wrapper_context(void *context) {
 }
 
 static unit_test *create_test_runner(unit_test *test, int expected_failures, int expected_count) { // consumes test
-    unit_test *wrapper = test_alloc(run_test);
-    if (wrapper) {
-        runner_context *context = malloc(sizeof(runner_context));
-        if (context) {
+    runner_context *context = malloc(sizeof(runner_context));
+    if (context) {
+        unit_test *wrapper = test_alloc_with_context(run_test, context, dealloc_wrapper_context);
+        if (wrapper) {
             context->test = test;
             context->expected_failures = expected_failures;
             context->expected_count = expected_count;
-            wrapper->context = context;
-            wrapper->dealloc = dealloc_wrapper_context;
             return wrapper;
         } else {
+            dealloc_wrapper_context(context);
             log_error("can't allocate runner context");
         }
     } else {
