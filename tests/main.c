@@ -13,8 +13,7 @@
 
 #pragma mark - suite
 
-int main(int argc, const char * argv[])
-{
+int main(int argc, const char * argv[]) {
     unit_test *suite = test_suite_alloc(7, (unit_test *[]) {
         create_log_tests(),
         create_rc_tests(),

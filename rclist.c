@@ -14,8 +14,8 @@ struct rclist {
 
 
 static void _rclist_dealloc(void *rc) {
-    return_unless(rc);
-    return_unless(rc_get_type(rc) == rc_type_list);
+    return_unless(, rc);
+    return_unless(, rc_get_type(rc) == rc_type_list);
     
     rclist *list = rc;
     rc_release(list->key);
@@ -25,7 +25,7 @@ static void _rclist_dealloc(void *rc) {
 
 rclist *rclist_cons(void *key, void *value, void *next) {
     rclist *result = rc_alloc(sizeof(rclist), rc_type_list, _rclist_dealloc);
-    return_value_unless(result, NULL);
+    return_unless(NULL, result);
     
     result->key = rc_retain(key);
     result->value = rc_retain(value);
@@ -35,17 +35,17 @@ rclist *rclist_cons(void *key, void *value, void *next) {
 }
 
 void *rclist_key(rclist *lst) {
-    return_value_unless(lst, NULL);
+    return_unless(NULL, lst);
     return lst->key;
 }
 
 void *rclist_value(rclist *lst) {
-    return_value_unless(lst, NULL);
+    return_unless(NULL, lst);
     return lst->value;
 }
 
 void *rclist_next(rclist *lst) {
-    return_value_unless(lst, NULL);
+    return_unless(NULL, lst);
     return lst->next;
 }
 
@@ -93,12 +93,12 @@ rcstr *rclist2str(rclist *lst) {
     rc_release(value);
     rc_release(next);
 
-    return_value_unless(result, NULL);
+    return_unless(NULL, result);
     return result;
 }
 
 int rclist_hash(rclist *lst) {
-    return_value_unless(lst, 0);
+    return_unless(0, lst);
     
     return rc_hash(lst->key) + rc_hash(lst->value) * 0x1007 + rc_hash(lst->next) * 0x10000b;
 }

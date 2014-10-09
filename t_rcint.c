@@ -18,10 +18,10 @@ static void _simple(unit_state *state) {
 
 static void _test_str(unit_state *state, int expected) {
     rcint *a = rcint_alloc(expected);
-    return_unless(a);
+    return_unless(, a);
     
     rcstr *got = rc2str(a);
-    return_unless(got);
+    return_unless(, got);
     rc_release(a);
     
     static char buffer[16];

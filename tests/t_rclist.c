@@ -13,13 +13,13 @@ static rclist *create_node(const char *key, const char *value, void *next) {
     rclist *result = rclist_cons(rckey, rcvalue, next);
     rc_release(rckey);
     rc_release(rcvalue);
-    return_value_unless(result, NULL);
+    return_unless(NULL, result);
     return result;
 }
 
 static void _empty_list(unit_state *state) {
     rclist *lst = create_node(NULL, NULL, NULL);
-    return_unless(lst);
+    return_unless(, lst);
 
     assert_eq(state, NULL, rclist_key(lst));
     assert_eq(state, NULL, rclist_value(lst));
@@ -29,10 +29,10 @@ static void _empty_list(unit_state *state) {
 }
 
 static void _test_str(unit_state *state, rclist *lst, const char *expected) {
-    return_unless(lst);
+    return_unless(, lst);
     
     rcstr *got = rc2str(lst);
-    return_unless(got);
+    return_unless(, got);
     
     rc_release(lst);
     assert_eq_str(state, expected, rcstr_str(got));
@@ -45,7 +45,7 @@ static void _empty_list_string(unit_state *state) {
 
 static void _simple_list(unit_state *state) {
     rclist *lst = create_node("key", "value", NULL);
-    return_unless(lst);
+    return_unless(, lst);
     
     assert_eq_str(state, "key", rcstr_str(rclist_key(lst)));
     assert_eq_str(state, "value", rcstr_str(rclist_value(lst)));

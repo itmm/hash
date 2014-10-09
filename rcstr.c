@@ -24,7 +24,7 @@ rcstr *rcstr_dups(size_t count, const char *srcs[count]) {
     }
 
     void *result = rc_alloc(length, rc_type_string, NULL);
-    return_value_unless(result, NULL);
+    return_unless(NULL, result);
 
     char *dest = result;
     for (const char **cur = begin; cur != end; ++cur) {
@@ -111,7 +111,7 @@ rcstr *rcstr2str(rcstr *str) {
             size_t used = out - out_begin;
             size_t needed = used * 2;
             out_begin = realloc(out_begin, needed);
-            return_value_unless(out_begin, NULL);
+            return_unless(NULL, out_begin);
             out = out_begin + used;
             out_end = out_begin + needed;
         }
@@ -121,7 +121,7 @@ rcstr *rcstr2str(rcstr *str) {
                 size_t used = cur - (const char *) str;
                 size_t needed = used + 10;
                 out_begin = malloc(needed);
-                return_value_unless(out_begin, NULL);
+                return_unless(NULL, out_begin);
                 out_end = out_begin + needed;
                 memcpy(out_begin, str, used);
                 out = out_begin + used;
@@ -141,12 +141,12 @@ rcstr *rcstr2str(rcstr *str) {
     } else {
         result = rc_retain(str);
     }
-    return_value_unless(result, NULL);
+    return_unless(NULL, result);
     return result;
 }
 
 const char *rcstr_str(rcstr *rs) {
-    return_value_unless(rs, NULL);
+    return_unless(NULL, rs);
     return (const char *) rs;
 }
 
@@ -166,7 +166,7 @@ rcstr *rc2str(void *rc) {
 
 int rcstr_hash(rcstr *rs) {
     const char *cur = rcstr_str(rs);
-    return_value_unless(cur, 0);
+    return_unless(0, cur);
     int result = 0;
     for (; *cur; ++cur) {
         result = result * 17 + *cur;

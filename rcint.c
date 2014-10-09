@@ -12,13 +12,13 @@ struct rcint {
 
 rcint *rcint_alloc(int value) {
     rcint *result = rc_alloc(sizeof(int), rc_type_int, NULL);
-    return_value_unless(result, NULL);
+    return_unless(NULL, result);
     result->value = value;
     return result;
 }
 
 int rcint_value(rcint *ri) {
-    return_value_unless(ri, 0);
+    return_unless(0, ri);
     return ri->value;
 }
 

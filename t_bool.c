@@ -6,24 +6,24 @@
 
 static void _true(unit_state *state) {
     void *t = rc_true();
-    return_unless(t);
+    return_unless(, t);
     assert_eq(state, rc_get_type(t), rc_type_true);
     rc_release(t);
 }
 
 static void _false(unit_state *state) {
     void *f = rc_false();
-    return_unless(f);
+    return_unless(, f);
     assert_eq(state, rc_get_type(f), rc_type_false);
     rc_release(f);
 }
 
 static void _hashes(unit_state *state) {
     void *t = rc_true();
-    return_unless(t);
+    return_unless(, t);
     
     void *f = rc_false();
-    return_unless(f);
+    return_unless(, f);
     
     int ht = rc_hash(t);
     int hf = rc_hash(f);

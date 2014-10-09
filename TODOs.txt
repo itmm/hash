@@ -1,6 +1,7 @@
 o   reference counting hash
 o   string representation of hash
 o   hash value for hash
+o   double instead of ints
 o   compare ints
 o   compare strings
 o   compare hashs
@@ -8,6 +9,7 @@ o   compare lists
 o   compare true
 o   compare false
 
+x   cleaned up logging
 x   string representation of true
 x   string representation of false
 x   hash value for true

@@ -28,7 +28,7 @@ void *rc_alloc(size_t size, rc_type type, dealloc_fn *dealloc) {
     if (size <= SIZE_MAX - data_size) {
         size += data_size;
         result = malloc(size);
-        return_value_unless(result, NULL);
+        return_unless(NULL, result);
         struct rc *r = result;
         r->dealloc = dealloc;
         r->count = 1;
@@ -82,7 +82,7 @@ void *rc_release(void *rc) {
 }
 
 rc_type rc_get_type(void *rc) {
-    return_value_unless(rc, rc_type_unknown);
+    return_unless(rc_type_unknown, rc);
     struct rc *r = rc - padded_rc_size();
     return r->type;
 }
@@ -105,7 +105,7 @@ void *rc_true() {
     static void *_singleton = NULL;
     if (!_singleton) {
         _singleton = rc_alloc(0, rc_type_true, NULL);
-        return_value_unless(_singleton, NULL);
+        return_unless(NULL, _singleton);
     }
     return rc_retain(_singleton);
 }
@@ -114,7 +114,7 @@ void *rc_false() {
     static void *_singleton = NULL;
     if (!_singleton) {
         _singleton = rc_alloc(0, rc_type_false, NULL);
-        return_value_unless(_singleton, NULL);
+        return_unless(NULL, _singleton);
     }
     return rc_retain(_singleton);
 }

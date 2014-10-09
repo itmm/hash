@@ -205,7 +205,7 @@
 		70E43C0F18D09A5E00C4AF92 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = DVAG;
 			};
 			buildConfigurationList = 70E43C1218D09A5E00C4AF92 /* Build configuration list for PBXProject "hash" */;
@@ -339,6 +339,7 @@
 		70E43C1C18D09A5E00C4AF92 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -347,6 +348,7 @@
 		70E43C1D18D09A5E00C4AF92 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
