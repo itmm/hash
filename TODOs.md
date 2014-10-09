@@ -1,13 +1,13 @@
 - [ ] reference counting hash
 - [ ] string representation of hash
+- [ ] nil object
 - [ ] hash value for hash
 - [ ] double instead of ints
 - [ ] compare ints
 - [ ] compare strings
 - [ ] compare hashs
 - [ ] compare lists
-- [ ] compare true
-- [ ] compare false
+- [ ] gc instead of rc
 
 ### done
 
