@@ -1,0 +1,44 @@
+- [ ] reference counting hash
+- [ ] string representation of hash
+- [ ] hash value for hash
+- [ ] double instead of ints
+- [ ] compare ints
+- [ ] compare strings
+- [ ] compare hashs
+- [ ] compare lists
+- [ ] compare true
+- [ ] compare false
+
+### done
+
+- [x] cleaned up logging
+- [x] string representation of true
+- [x] string representation of false
+- [x] hash value for true
+- [x] hash value for false
+- [x] reference counting true
+- [x] reference counting false
+- [x] hash value for list
+- [x] hash value for string
+- [x] hash value for int
+- [x] readonly access to list properties
+- [x] accessor for string
+- [x] accessor for int
+- [x] reference counting int
+- [x] knoten in t_rclist schöner erzeugen
+- [x] mismatching quotes in string escapen
+- [x] backslash in string escapen
+- [x] strings escapen, wenn whitespace
+- [x] strings escapen, wenn quotes
+- [x] strings escapen, wenn klammern
+- [x] strings escapen, wenn colon
+- [x] string representation of list
+- [x] reference counting list
+- [x] reference counting type
+- [x] no double asserts in unit-test
+- [x] reference counting string
+- [x] model suite using context
+- [x] add context to unit-test
+- [x] custom destructor for context
+- [x] separate run state from unit-test
+- [x] dynamic sized log strings
