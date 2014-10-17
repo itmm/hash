@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		70616A3619EE603F00569969 /* gc.c in Sources */ = {isa = PBXBuildFile; fileRef = 70616A3419EE603F00569969 /* gc.c */; };
+		70616A3719EE603F00569969 /* gc.h in Headers */ = {isa = PBXBuildFile; fileRef = 70616A3519EE603F00569969 /* gc.h */; };
 		7090ADB018E5846B008A91C3 /* t_rcint.c in Sources */ = {isa = PBXBuildFile; fileRef = 7090ADAF18E5846B008A91C3 /* t_rcint.c */; };
 		7090ADB318E585D9008A91C3 /* rcint.c in Sources */ = {isa = PBXBuildFile; fileRef = 7090ADB218E585D9008A91C3 /* rcint.c */; };
 		7090ADB618E5A981008A91C3 /* t_bool.c in Sources */ = {isa = PBXBuildFile; fileRef = 7090ADB518E5A981008A91C3 /* t_bool.c */; };
@@ -47,6 +49,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		70616A3419EE603F00569969 /* gc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gc.c; sourceTree = "<group>"; };
+		70616A3519EE603F00569969 /* gc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gc.h; sourceTree = "<group>"; };
 		7090ADAE18E5845D008A91C3 /* t_rcint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = t_rcint.h; path = tests/t_rcint.h; sourceTree = SOURCE_ROOT; };
 		7090ADAF18E5846B008A91C3 /* t_rcint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t_rcint.c; sourceTree = SOURCE_ROOT; };
 		7090ADB118E585BB008A91C3 /* rcint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcint.h; sourceTree = "<group>"; };
@@ -102,6 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				70E43C3818D6DDFB00C4AF92 /* TODOs.md */,
+				70616A3419EE603F00569969 /* gc.c */,
+				70616A3519EE603F00569969 /* gc.h */,
 				70E43C2418D1B0B000C4AF92 /* unit.h */,
 				70E43C2518D1B0BB00C4AF92 /* unit.c */,
 				70E43C2118D0A86800C4AF92 /* log.h */,
@@ -158,6 +164,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70616A3719EE603F00569969 /* gc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +243,7 @@
 				70E43C2318D0AA5C00C4AF92 /* log.c in Sources */,
 				7097B5DB18D7071E00730A24 /* rcstr.c in Sources */,
 				70E43C2018D09B7500C4AF92 /* rc.c in Sources */,
+				70616A3619EE603F00569969 /* gc.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
